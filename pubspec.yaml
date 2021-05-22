@@ -1,19 +1,7 @@
 name: shoppy
 description: A new Flutter project.
 
-
-
-publish_to: 'none' 
-
-
-
-
-
-
-
-
-
-
+publish_to: 'none'
 
 version: 1.0.0+1
 
@@ -23,8 +11,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  backdrop: ^0.6.1
+  badges: ^2.0.1
+  carousel_pro: ^1.0.0
   cupertino_icons: ^1.0.2
   flutter_icons: ^1.1.0
+  flutter_staggered_grid_view: ^0.4.0
+  flutter_swiper: ^1.1.6
   list_tile_switch: ^1.0.0
   provider: ^5.0.0
   shared_preferences: ^2.0.5
@@ -33,42 +26,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
-
-
 flutter:
 
-  
-  
-  
   uses-material-design: true
 
   assets:
     - assets/images/
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  

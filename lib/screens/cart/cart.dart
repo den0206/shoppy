@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
-import 'package:shoppy/screens/widget/Cart_Widgets.dart';
+import 'package:shoppy/screens/cart/cart_Widgets.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key key}) : super(key: key);
