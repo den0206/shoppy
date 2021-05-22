@@ -27,7 +27,7 @@ class _UserInfoState extends State<UserInfo> {
 
   @override
   Widget build(BuildContext context) {
-    final themeChange = Provider.of<DarkThemeProvider>(context);
+    final themeChange = Provider.of<ThemeProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -38,7 +38,7 @@ class _UserInfoState extends State<UserInfo> {
               SliverAppBar(
                 automaticallyImplyLeading: false,
                 elevation: 4,
-                expandedHeight: 200,
+                expandedHeight: MediaQuery.of(context).size.height / 4,
                 pinned: true,
                 flexibleSpace: LayoutBuilder(
                   builder: (context, constraints) {
@@ -130,7 +130,7 @@ class _UserInfoState extends State<UserInfo> {
                       color: Colors.grey,
                     ),
                     ListTileSwitch(
-                      value: Provider.of<DarkThemeProvider>(context).darkMode,
+                      value: Provider.of<ThemeProvider>(context).darkMode,
                       leading: Icon(Ionicons.md_moon),
                       onChanged: (value) {
                         themeChange.toggleButtons();

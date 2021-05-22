@@ -4,10 +4,14 @@ import 'package:shoppy/screens/feeds/feed_products.dart';
 
 class Feeds extends StatelessWidget {
   const Feeds({Key key}) : super(key: key);
+  static const routeName = '/FeedsScreen';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Feeds"),
+      ),
       body: GridView.count(
         crossAxisCount: 2,
         childAspectRatio: 240 / 290,

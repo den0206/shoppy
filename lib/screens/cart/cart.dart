@@ -6,6 +6,8 @@ import 'package:shoppy/screens/cart/cart_Widgets.dart';
 class CartScreen extends StatelessWidget {
   const CartScreen({Key key}) : super(key: key);
 
+  static const routeName = '/CartScreen';
+
   @override
   Widget build(BuildContext context) {
     List products = ["a"];

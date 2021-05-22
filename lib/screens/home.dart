@@ -3,8 +3,17 @@ import 'package:backdrop/button.dart';
 import 'package:backdrop/scaffold.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
+import 'package:shoppy/model/popular_brand.dart';
+import 'package:shoppy/screens/brandRails/brand_rails.dart';
+import 'package:shoppy/screens/cart/cart.dart';
+import 'package:shoppy/screens/category/category.dart';
+import 'package:shoppy/screens/feeds/feeds.dart';
+import 'package:shoppy/screens/wishlist/wishlist.dart';
 
 class Home extends StatelessWidget {
   const Home({Key key}) : super(key: key);
@@ -75,6 +84,117 @@ class Home extends StatelessWidget {
                     ExactAssetImage(_carouselImages[3]),
                   ],
                 ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Text(
+                  "Categories",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 180,
+                child: ListView.builder(
+                  itemCount: 7,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Category(index: index);
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Text(
+                      "Popular Brands",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Spacer(),
+                    TextButton(
+                      child: Text(
+                        "View all...",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                          color: Colors.red,
+                        ),
+                      ),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                height: 210,
+                width: MediaQuery.of(context).size.width * 0.95,
+                child: Swiper(
+                  itemCount: brands.length,
+                  autoplay: true,
+                  viewportFraction: 0.8,
+                  scale: 0.9,
+                  onTap: (index) {
+                    Navigator.pushNamed(context, BrandNavigationRail.routeName,
+                        arguments: index);
+                  },
+                  itemBuilder: (context, index) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                        color: Colors.blueGrey,
+                        child: Image.asset(
+                          brands[index].imagePath,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    Text(
+                      "Popula Products",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Spacer(),
+                    TextButton(
+                      child: Text(
+                        "View all...",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 15,
+                          color: Colors.red,
+                        ),
+                      ),
+                      onPressed: () {},
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 285,
+                margin: EdgeInsets.symmetric(horizontal: 3),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 8,
+                  itemBuilder: (context, index) {
+                    return PopularProducts();
+                  },
+                ),
               )
             ],
           ),
@@ -84,7 +204,7 @@ class Home extends StatelessWidget {
   }
 }
 
-List _carouselImages = [
+final List _carouselImages = [
   'assets/images/carousel1.png',
   'assets/images/carousel2.jpeg',
   'assets/images/carousel3.jpg',
@@ -203,7 +323,9 @@ class BackLayerMenu extends StatelessWidget {
                   _NavigatoMenu(
                     title: "Feeds",
                     index: 0,
-                    onTap: () {},
+                    onTap: () {
+                      navigateTo(context, Feeds.routeName);
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -211,7 +333,9 @@ class BackLayerMenu extends StatelessWidget {
                   _NavigatoMenu(
                     title: "Cart",
                     index: 1,
-                    onTap: () {},
+                    onTap: () {
+                      navigateTo(context, CartScreen.routeName);
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -219,7 +343,9 @@ class BackLayerMenu extends StatelessWidget {
                   _NavigatoMenu(
                     title: "WishList",
                     index: 2,
-                    onTap: () {},
+                    onTap: () {
+                      navigateTo(context, WishListScreen.routeName);
+                    },
                   ),
                   SizedBox(
                     height: 10,
@@ -227,7 +353,9 @@ class BackLayerMenu extends StatelessWidget {
                   _NavigatoMenu(
                     title: "Upload New Product",
                     index: 3,
-                    onTap: () {},
+                    onTap: () {
+                      print("Upload");
+                    },
                   ),
                 ],
               ),
@@ -276,6 +404,133 @@ class _NavigatoMenu extends StatelessWidget {
           ),
           Icon(_contentIcons[index]),
         ],
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class PopularProducts extends StatelessWidget {
+  const PopularProducts({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Container(
+        width: 250,
+        decoration: BoxDecoration(
+          color: Theme.of(context).backgroundColor,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            bottomRight: Radius.circular(10),
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {},
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(10),
+              bottomRight: Radius.circular(10),
+            ),
+            child: Column(
+              children: [
+                Stack(
+                  children: [
+                    Container(
+                      height: 170,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU',
+                          ),
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 12,
+                      top: 10,
+                      child: Icon(
+                        Entypo.star,
+                        color: Colors.grey.shade800,
+                      ),
+                    ),
+                    Positioned(
+                      right: 10,
+                      top: 7,
+                      child: Icon(
+                        Entypo.star_outlined,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Positioned(
+                      right: 12,
+                      bottom: 32,
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        color: Theme.of(context).backgroundColor,
+                        child: Text(
+                          '\$ 12.2',
+                          style: TextStyle(
+                            color: Theme.of(context)
+                                .textSelectionTheme
+                                .selectionColor,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.all(8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "title",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Description",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.grey[800],
+                            ),
+                          ),
+                          Spacer(),
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Icon(
+                                  MaterialCommunityIcons.cart_plus,
+                                  size: 25,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

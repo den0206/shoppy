@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+void navigateTo(BuildContext ctx, String routeName) {
+  Navigator.of(ctx).pushNamed(
+    routeName,
+  );
+}
+
 class CustomButton extends StatelessWidget {
   const CustomButton({
     Key key,

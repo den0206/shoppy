@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class DarkThemeProvider extends ChangeNotifier {
+class ThemeProvider extends ChangeNotifier {
   static const key = "THEMESTATUS";
   SharedPreferences _preferences;
 
@@ -19,7 +19,7 @@ class DarkThemeProvider extends ChangeNotifier {
           selectionColor: Colors.blue,
         ));
 
-  DarkThemeProvider() {
+  ThemeProvider() {
     _darkMode = false;
     _loadPreferences();
   }

@@ -65,7 +65,7 @@ class FullCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<DarkThemeProvider>(context);
+    final theme = Provider.of<ThemeProvider>(context);
 
     return Container(
       height: 135,
