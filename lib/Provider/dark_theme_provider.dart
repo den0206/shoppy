@@ -13,6 +13,9 @@ class ThemeProvider extends ChangeNotifier {
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: Colors.white,
           ),
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor: Colors.white,
+          ),
         )
       : ThemeData.light().copyWith(
           textSelectionTheme: TextSelectionThemeData(

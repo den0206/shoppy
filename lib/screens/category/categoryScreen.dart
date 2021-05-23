@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/model/category.dart';
 
-class Category extends StatelessWidget {
-  const Category({
+class CategoryScreen extends StatelessWidget {
+  const CategoryScreen({
     Key key,
-    @required this.index,
+    @required this.category,
   }) : super(key: key);
 
-  final int index;
+  final Category category;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class Category extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             image: DecorationImage(
               image: AssetImage(
-                _categories[index]["categoryImagesPath"],
+                category.imagePath,
               ),
               fit: BoxFit.cover,
             ),
@@ -34,7 +35,7 @@ class Category extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             color: Theme.of(context).backgroundColor,
             child: Text(
-              _categories[index]["categoryName"],
+              category.name,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
@@ -47,34 +48,3 @@ class Category extends StatelessWidget {
     );
   }
 }
-
-List<Map<String, Object>> _categories = [
-  {
-    'categoryName': 'Phones',
-    'categoryImagesPath': 'assets/images/CatPhones.png',
-  },
-  {
-    'categoryName': 'Clothes',
-    'categoryImagesPath': 'assets/images/CatClothes.jpg',
-  },
-  {
-    'categoryName': 'Shoes',
-    'categoryImagesPath': 'assets/images/CatShoes.jpg',
-  },
-  {
-    'categoryName': 'Beauty&Health',
-    'categoryImagesPath': 'assets/images/CatBeauty.jpg',
-  },
-  {
-    'categoryName': 'Laptops',
-    'categoryImagesPath': 'assets/images/CatLaptops.png',
-  },
-  {
-    'categoryName': 'Furniture',
-    'categoryImagesPath': 'assets/images/CatFurniture.jpg',
-  },
-  {
-    'categoryName': 'Watches',
-    'categoryImagesPath': 'assets/images/CatWatches.jpg',
-  },
-];

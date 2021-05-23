@@ -4,6 +4,15 @@ import 'package:list_tile_switch/list_tile_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/screens/userInfo/userInfo_widget.dart';
+
+const List<IconData> _userTileIcons = [
+  Icons.email,
+  Icons.phone,
+  Icons.local_shipping,
+  Icons.watch_later,
+  Icons.exit_to_app_rounded
+];
 
 class UserInfo extends StatefulWidget {
   const UserInfo({Key key}) : super(key: key);
@@ -115,16 +124,32 @@ class _UserInfoState extends State<UserInfo> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    userTitle("User Info"),
+                    UserTitle(title: "User info"),
                     Divider(
                       thickness: 1,
                       color: Colors.grey,
                     ),
-                    userListTile('Email', 'Email sub', 0, context),
-                    userListTile('Phone number', '4555', 1, context),
-                    userListTile('Shipping address', '', 2, context),
-                    userListTile('joined date', 'date', 3, context),
-                    userTitle("User Settings"),
+                    UserListTile(
+                      title: "Email",
+                      subtitle: "@",
+                      icon: Icon(_userTileIcons[0]),
+                      ontap: () {
+                        print("Email");
+                      },
+                    ),
+                    UserListTile(
+                        title: "Phone number",
+                        subtitle: "Phone number",
+                        icon: Icon(_userTileIcons[1])),
+                    UserListTile(
+                        title: "Shipping address",
+                        subtitle: "address",
+                        icon: Icon(_userTileIcons[2])),
+                    UserListTile(
+                        title: "joined date",
+                        subtitle: "date",
+                        icon: Icon(_userTileIcons[3])),
+                    UserTitle(title: "User Settings"),
                     Divider(
                       thickness: 1,
                       color: Colors.grey,
@@ -143,94 +168,18 @@ class _UserInfoState extends State<UserInfo> {
                         'Dark Theme',
                       ),
                     ),
-                    userListTile("Logout", "", 4, context),
+                    UserListTile(
+                        title: "Logout",
+                        subtitle: "",
+                        icon: Icon(_userTileIcons[4]))
                   ],
                 ),
               )
             ],
           ),
-          _buildFab(),
+          CameraButton(scrollController: _scontroller)
         ],
       ),
     );
   }
-
-  Padding userTitle(String title) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 14),
-      child: Text(
-        title,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 23),
-      ),
-    );
-  }
-
-  Material userListTile(
-      String title, String subtitle, int index, BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        splashColor: Theme.of(context).splashColor,
-        child: ListTile(
-          title: Text(title),
-          subtitle: Text(subtitle),
-          leading: Icon(_userTileIcons[index]),
-          onTap: () {
-            print("email");
-          },
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFab() {
-    //starting fab position
-    final double defaultTopMargin = 200.0 - 4.0;
-    //pixels from top where scaling should start
-    final double scaleStart = 160.0;
-    //pixels from top where scaling should end
-    final double scaleEnd = scaleStart / 2;
-
-    double top = defaultTopMargin;
-    double scale = 1.0;
-    if (_scontroller.hasClients) {
-      double offset = _scontroller.offset;
-      top -= offset;
-      if (offset < defaultTopMargin - scaleStart) {
-        //offset small => don't scale down
-        scale = 1.0;
-      } else if (offset < defaultTopMargin - scaleEnd) {
-        //offset between scaleStart and scaleEnd => scale down
-        scale = (defaultTopMargin - scaleEnd - offset) / scaleEnd;
-      } else {
-        //offset passed scaleEnd => hide fab
-        scale = 0.0;
-      }
-    }
-
-    return Positioned(
-      top: top,
-      right: 16.0,
-      child: Transform(
-        transform: Matrix4.identity()..scale(scale),
-        alignment: Alignment.center,
-        child: FloatingActionButton(
-          backgroundColor: Colors.purple,
-          heroTag: "btn1",
-          onPressed: () {
-            print("Camera");
-          },
-          child: Icon(Icons.camera_alt_outlined),
-        ),
-      ),
-    );
-  }
 }
-
-const List<IconData> _userTileIcons = [
-  Icons.email,
-  Icons.phone,
-  Icons.local_shipping,
-  Icons.watch_later,
-  Icons.exit_to_app_rounded
-];

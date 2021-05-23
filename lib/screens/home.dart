@@ -8,10 +8,11 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
+import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
-import 'package:shoppy/screens/category/category.dart';
+import 'package:shoppy/screens/category/categoryScreen.dart';
 import 'package:shoppy/screens/feeds/feeds.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
 
@@ -99,10 +100,14 @@ class Home extends StatelessWidget {
                 width: double.infinity,
                 height: 180,
                 child: ListView.builder(
-                  itemCount: 7,
+                  itemCount: categories.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return Category(index: index);
+                    final Category category = categories[index];
+
+                    return CategoryScreen(
+                      category: category,
+                    );
                   },
                 ),
               ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
+import 'package:shoppy/screens/product_details.dart';
 
 class Feeds extends StatelessWidget {
   const Feeds({Key key}) : super(key: key);
@@ -20,7 +22,12 @@ class Feeds extends StatelessWidget {
         children: List.generate(
           100,
           (index) {
-            return FeedProducts();
+            return InkWell(
+              child: FeedProducts(),
+              onTap: () {
+                navigateTo(context, DetailProductPage.routeName);
+              },
+            );
           },
         ),
       ),

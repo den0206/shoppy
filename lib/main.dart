@@ -5,6 +5,7 @@ import 'package:shoppy/screens/bottom_bar.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feeds.dart';
+import 'package:shoppy/screens/product_details.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
 
 void main() {
@@ -20,7 +21,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider<ThemeProvider>(
           create: (context) => ThemeProvider(),
-        )
+        ),
+        ChangeNotifierProvider<BottomBarModel>(
+          create: (context) => BottomBarModel(),
+        ),
       ],
       child: Consumer<ThemeProvider>(builder: (context, themeData, child) {
         return MaterialApp(
@@ -30,7 +34,8 @@ class MyApp extends StatelessWidget {
             CartScreen.routeName: (context) => CartScreen(),
             Feeds.routeName: (context) => Feeds(),
             WishListScreen.routeName: (context) => WishListScreen(),
-            BrandNavigationRail.routeName: (context) => BrandNavigationRail()
+            BrandNavigationRail.routeName: (context) => BrandNavigationRail(),
+            DetailProductPage.routeName: (context) => DetailProductPage()
           },
           home: BottomBarScreen(),
         );

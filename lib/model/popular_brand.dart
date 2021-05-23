@@ -13,11 +13,11 @@ class Brand {
 final List<Brand> brands = [
   Brand(brandname: "Addidas", imagePath: 'assets/images/addidas.jpg'),
   Brand(
-    brandname: "apple",
+    brandname: "Apple",
     imagePath: 'assets/images/apple.jpg',
   ),
   Brand(brandname: "Dell", imagePath: 'assets/images/Dell.jpg'),
-  Brand(brandname: "h&m", imagePath: 'assets/images/h&m.jpg'),
-  Brand(brandname: "samsung", imagePath: 'assets/images/samsung.jpg'),
+  Brand(brandname: "H&M", imagePath: 'assets/images/h&m.jpg'),
+  Brand(brandname: "Samsung", imagePath: 'assets/images/samsung.jpg'),
   Brand(brandname: "Huawei", imagePath: 'assets/images/Huawei.jpg'),
 ];
