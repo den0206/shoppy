@@ -10,7 +10,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List products = ["a"];
+    List products = [];
 
     return Scaffold(
       bottomSheet: products.isEmpty ? null : _CheckoutSection(),

@@ -41,6 +41,7 @@ class ThemeProvider extends ChangeNotifier {
   _loadPreferences() async {
     await _initialPreferences();
     _darkMode = _preferences.getBool(key) ?? false;
+    print(_darkMode);
     notifyListeners();
   }
 

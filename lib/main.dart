@@ -31,21 +31,23 @@ class MyApp extends StatelessWidget {
           create: (context) => ProductsProvider(),
         )
       ],
-      child: Consumer<ThemeProvider>(builder: (context, themeData, child) {
-        return MaterialApp(
-          title: 'Flutter Demo',
-          theme: themeData.buildTheme(),
-          routes: {
-            CartScreen.routeName: (context) => CartScreen(),
-            Feeds.routeName: (context) => Feeds(),
-            WishListScreen.routeName: (context) => WishListScreen(),
-            BrandNavigationRail.routeName: (context) => BrandNavigationRail(),
-            DetailProductPage.routeName: (context) => DetailProductPage(),
-            CategoryFeeds.routeName: (context) => CategoryFeeds(),
-          },
-          home: BottomBarScreen(),
-        );
-      }),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeData, child) {
+          return MaterialApp(
+            title: 'Flutter Demo',
+            theme: themeData.buildTheme(),
+            routes: {
+              CartScreen.routeName: (context) => CartScreen(),
+              Feeds.routeName: (context) => Feeds(),
+              WishListScreen.routeName: (context) => WishListScreen(),
+              BrandNavigationRail.routeName: (context) => BrandNavigationRail(),
+              DetailProductPage.routeName: (context) => DetailProductPage(),
+              CategoryFeeds.routeName: (context) => CategoryFeeds(),
+            },
+            home: BottomBarScreen(),
+          );
+        },
+      ),
     );
   }
 }

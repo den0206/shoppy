@@ -13,7 +13,6 @@ class Feeds extends StatelessWidget {
   Widget build(BuildContext context) {
     final products = Provider.of<ProductsProvider>(context).products;
 
-    print(products.length);
     return Scaffold(
       appBar: AppBar(
         title: Text("Feeds"),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/model/popular_brand.dart';
+import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/screens/brandRails/brand_cell.dart';
 
 class BrandNavigationModel extends ChangeNotifier {
@@ -33,7 +34,7 @@ class BrandNavigationRail extends StatelessWidget {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text(brand.brandname),
+              title: Text(brand.name),
             ),
             body: Row(
               children: [
@@ -82,9 +83,6 @@ class BrandNavigationRail extends StatelessWidget {
                             destinations: [
                               for (int i = 0; i < brands.length; i++)
                                 buildRotatedTextRailDestination(brands[i]),
-
-                              /// all
-                              buildRotatedTextRailDestination(null),
                             ],
                           ),
                         ),
@@ -111,7 +109,7 @@ class BrandNavigationRail extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: padding),
         child: RotatedBox(
           quarterTurns: -1,
-          child: brand != null ? Text(brand.brandname) : Text("All"),
+          child: brand != null ? Text(brand.name) : Text("All"),
         ),
       ),
     );
@@ -128,6 +126,11 @@ class BrandSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    final brandList = brand != Brand.all
+        ? productsProvider.fibdByBrand(brand)
+        : productsProvider.products;
+
     return Expanded(
       child: Padding(
         padding: EdgeInsets.fromLTRB(24, 8, 0, 0),
@@ -135,9 +138,9 @@ class BrandSpace extends StatelessWidget {
           removeTop: true,
           context: context,
           child: ListView.builder(
-            itemCount: 5,
+            itemCount: brandList.length,
             itemBuilder: (context, index) {
-              return BrandCell();
+              return BrandCell(product: brandList[index]);
             },
           ),
         ),

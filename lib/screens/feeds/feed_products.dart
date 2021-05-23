@@ -48,22 +48,17 @@ class FeedProducts extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 5,
-                        top: 5,
-                        child: Badge(
-                          alignment: Alignment.center,
-                          toAnimate: true,
-                          shape: BadgeShape.square,
-                          badgeColor: Colors.pink,
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(8),
-                          ),
-                          badgeContent: Text(
-                            "New",
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      Badge(
+                        alignment: Alignment.center,
+                        toAnimate: true,
+                        shape: BadgeShape.square,
+                        badgeColor: Colors.pink,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(8),
+                        ),
+                        badgeContent: Text(
+                          "New",
+                          style: TextStyle(color: Colors.white),
                         ),
                       )
                     ],

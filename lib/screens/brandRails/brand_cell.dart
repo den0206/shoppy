@@ -1,11 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:shoppy/screens/product_details.dart';
 
 class BrandCell extends StatelessWidget {
-  const BrandCell({Key key}) : super(key: key);
+  const BrandCell({
+    Key key,
+    @required this.product,
+  }) : super(key: key);
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.of(context)
+            .pushNamed(DetailProductPage.routeName, arguments: product);
+      },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 5),
         margin: EdgeInsets.only(right: 20, bottom: 5, top: 18),
@@ -18,9 +29,7 @@ class BrandCell extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
                   image: DecorationImage(
-                    image: NetworkImage(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU',
-                    ),
+                    image: NetworkImage(product.imageUrl),
                   ),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -56,7 +65,7 @@ class BrandCell extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "title",
+                      product.title,
                       maxLines: 4,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -69,7 +78,7 @@ class BrandCell extends StatelessWidget {
                     ),
                     FittedBox(
                       child: Text(
-                        'US 16 \$',
+                        '${product.price} \$',
                         maxLines: 1,
                         style: TextStyle(
                           color: Colors.red,
@@ -81,7 +90,7 @@ class BrandCell extends StatelessWidget {
                       height: 20,
                     ),
                     Text(
-                      "CategoryName",
+                      "${product.category} ",
                       style: TextStyle(
                         color: Colors.grey,
                         fontSize: 18,

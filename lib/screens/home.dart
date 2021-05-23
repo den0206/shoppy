@@ -5,11 +5,14 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/category/categoryScreen.dart';
@@ -21,6 +24,9 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    final popularProducts = productsProvider.popularProducts;
+
     return Scaffold(
       body: BackdropScaffold(
         frontLayerBackgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -141,12 +147,13 @@ class Home extends StatelessWidget {
                 height: 210,
                 width: MediaQuery.of(context).size.width * 0.95,
                 child: Swiper(
-                  itemCount: brands.length,
+                  itemCount: brands.length - 1,
                   autoplay: true,
                   viewportFraction: 0.8,
                   scale: 0.9,
                   onTap: (index) {
-                    Navigator.pushNamed(context, BrandNavigationRail.routeName,
+                    Navigator.of(context).pushNamed(
+                        BrandNavigationRail.routeName,
                         arguments: index);
                   },
                   itemBuilder: (context, index) {
@@ -195,9 +202,11 @@ class Home extends StatelessWidget {
                 margin: EdgeInsets.symmetric(horizontal: 3),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 8,
+                  itemCount: popularProducts.length,
                   itemBuilder: (context, index) {
-                    return PopularProducts();
+                    return PopularProducts(
+                      product: popularProducts[index],
+                    );
                   },
                 ),
               )
@@ -416,7 +425,12 @@ class _NavigatoMenu extends StatelessWidget {
 }
 
 class PopularProducts extends StatelessWidget {
-  const PopularProducts({Key key}) : super(key: key);
+  const PopularProducts({
+    Key key,
+    @required this.product,
+  }) : super(key: key);
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -447,9 +461,7 @@ class PopularProducts extends StatelessWidget {
                       height: 170,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(
-                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU',
-                          ),
+                          image: NetworkImage(product.imageUrl),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -477,7 +489,7 @@ class PopularProducts extends StatelessWidget {
                         padding: EdgeInsets.all(10),
                         color: Theme.of(context).backgroundColor,
                         child: Text(
-                          '\$ 12.2',
+                          '\$ ${product.price}',
                           style: TextStyle(
                             color: Theme.of(context)
                                 .textSelectionTheme
@@ -494,7 +506,7 @@ class PopularProducts extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "title",
+                        product.title,
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -503,7 +515,7 @@ class PopularProducts extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            "Description",
+                            "${product.category}",
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
