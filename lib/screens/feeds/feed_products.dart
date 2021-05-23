@@ -1,9 +1,15 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:shoppy/model/product.dart';
 import 'package:shoppy/screens/product_details.dart';
 
 class FeedProducts extends StatelessWidget {
-  const FeedProducts({Key key}) : super(key: key);
+  const FeedProducts({
+    Key key,
+    @required this.product,
+  }) : super(key: key);
+
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +17,8 @@ class FeedProducts extends StatelessWidget {
       padding: EdgeInsets.all(8),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(DetailProductPage.routeName);
-          // navigateTo(context, DetailProductPage.routeName);
+          Navigator.of(context)
+              .pushNamed(DetailProductPage.routeName, arguments: product);
         },
         child: Container(
           width: 250,
@@ -33,11 +39,12 @@ class FeedProducts extends StatelessWidget {
                           width: double.infinity,
                           constraints: BoxConstraints(
                             minHeight: 100,
-                            maxHeight: MediaQuery.of(context).size.height * 0.3,
+                            maxHeight:
+                                MediaQuery.of(context).size.height * 0.25,
                           ),
                           child: Image.network(
-                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU',
-                            fit: BoxFit.fitWidth,
+                            product.imageUrl,
+                            fit: BoxFit.fill,
                           ),
                         ),
                       ),
@@ -73,9 +80,9 @@ class FeedProducts extends StatelessWidget {
                       height: 4,
                     ),
                     Text(
-                      "Descriptipn",
+                      "${product.description}",
                       overflow: TextOverflow.ellipsis,
-                      maxLines: 2,
+                      maxLines: 1,
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.black,
@@ -85,7 +92,7 @@ class FeedProducts extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text(
-                        '\$ 158.99',
+                        '\$ ${product.price}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyle(
@@ -99,7 +106,7 @@ class FeedProducts extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Quantity 12",
+                          "${product.quantity}",
                           style: TextStyle(
                             fontSize: 12,
                             color: Colors.grey,

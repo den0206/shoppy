@@ -103,7 +103,7 @@ class Home extends StatelessWidget {
                   itemCount: categories.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    final Category category = categories[index];
+                    final KCategory category = categories[index];
 
                     return CategoryScreen(
                       category: category,

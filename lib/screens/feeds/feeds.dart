@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:provider/provider.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
-import 'package:shoppy/screens/product_details.dart';
 
 class Feeds extends StatelessWidget {
   const Feeds({Key key}) : super(key: key);
@@ -10,23 +11,24 @@ class Feeds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final products = Provider.of<ProductsProvider>(context).products;
+
+    print(products.length);
     return Scaffold(
       appBar: AppBar(
         title: Text("Feeds"),
       ),
       body: GridView.count(
         crossAxisCount: 2,
-        childAspectRatio: 240 / 290,
+        childAspectRatio: 240 / 390,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
         children: List.generate(
-          100,
+          products.length,
           (index) {
-            return InkWell(
-              child: FeedProducts(),
-              onTap: () {
-                navigateTo(context, DetailProductPage.routeName);
-              },
+            final product = products[index];
+            return FeedProducts(
+              product: product,
             );
           },
         ),
@@ -47,7 +49,9 @@ class StaggleProduct extends StatelessWidget {
         itemCount: 8,
         mainAxisSpacing: 8,
         crossAxisSpacing: 6,
-        itemBuilder: (context, index) => FeedProducts(),
+        itemBuilder: (context, index) => FeedProducts(
+          product: sampleProducts[index],
+        ),
         staggeredTileBuilder: (index) {
           return StaggeredTile.count(3, index.isEven ? 4 : 5);
         },

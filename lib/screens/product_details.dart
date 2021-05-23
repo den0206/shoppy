@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
@@ -12,7 +15,8 @@ class DetailProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final theme = Provider.of<ThemeProvider>(context);
+    final Product product = ModalRoute.of(context).settings.arguments;
+    print(product);
 
     return Scaffold(
       body: Stack(
@@ -21,9 +25,7 @@ class DetailProductPage extends StatelessWidget {
             foregroundDecoration: BoxDecoration(color: Colors.black12),
             height: MediaQuery.of(context).size.height * 0.45,
             width: double.infinity,
-            child: Image.network(
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU',
-            ),
+            child: Image.network(product.imageUrl),
           ),
           SingleChildScrollView(
             physics: AlwaysScrollableScrollPhysics(),
@@ -104,125 +106,130 @@ class DetailProductPage extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           fontSize: 21,
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 3,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Text(
-                    "Description",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 21,
-                      color: ColorsConsts.subTitle,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Divider(
-                    thickness: 1,
-                    color: Colors.grey,
-                    height: 1,
-                  ),
-                ),
-                _Datails(title: "Brand", info: "Brand"),
-                _Datails(title: "Quantyty", info: "Quantyty"),
-                _Datails(title: "Category", info: "Category"),
-                _Datails(title: "Popularity", info: "Popularity"),
-                SizedBox(
-                  height: 5,
-                ),
-                Divider(
-                  thickness: 1,
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                Container(
-                  width: double.infinity,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+                      ),
                       SizedBox(
-                        height: 10,
+                        height: 3,
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8),
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                          height: 1,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(16),
                         child: Text(
-                          "No Review",
+                          "Description",
                           style: TextStyle(
-                            color: Theme.of(context)
-                                .textSelectionTheme
-                                .selectionColor,
-                            fontWeight: FontWeight.w600,
+                            fontWeight: FontWeight.w400,
                             fontSize: 21,
+                            color: ColorsConsts.subTitle,
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Padding(
-                        padding: EdgeInsets.all(2),
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                          height: 1,
+                        ),
+                      ),
+                      _Datails(title: "Brand", info: "Brand"),
+                      _Datails(title: "Quantyty", info: "Quantyty"),
+                      _Datails(title: "Category", info: "Category"),
+                      _Datails(title: "Popularity", info: "Popularity"),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8),
+                              child: Text(
+                                "No Review",
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .textSelectionTheme
+                                      .selectionColor,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 21,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(2),
+                              child: Text(
+                                "Be The First Review",
+                                style: TextStyle(
+                                  color: ColorsConsts.subTitle,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 70,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(8),
+                        color: Theme.of(context).scaffoldBackgroundColor,
                         child: Text(
-                          "Be The First Review",
+                          "Suggested",
                           style: TextStyle(
-                            color: ColorsConsts.subTitle,
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w700,
                             fontSize: 20,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: 70,
-                      ),
+                      Container(
+                        margin: EdgeInsets.only(bottom: 30),
+                        width: double.infinity,
+                        height: 350,
+                        child: ListView.builder(
+                          itemCount: Provider.of<ProductsProvider>(context)
+                              .products
+                              .length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            return FeedProducts(
+                              product: Provider.of<ProductsProvider>(context)
+                                  .products[index],
+                            );
+                          },
+                        ),
+                      )
                     ],
                   ),
                 ),
-                Divider(
-                  thickness: 1,
-                  color: Colors.grey,
-                  height: 1,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(8),
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: Text(
-                    "Suggested",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 30),
-                  width: double.infinity,
-                  height: 300,
-                  child: ListView.builder(
-                    itemCount: 7,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return FeedProducts();
-                    },
-                  ),
-                )
               ],
             ),
           ),
