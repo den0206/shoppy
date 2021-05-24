@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/model/cart_attr.dart';
+import 'package:shoppy/provider/cart_provider.dart';
 
 class EmptyCart extends StatelessWidget {
   const EmptyCart({
@@ -61,11 +63,17 @@ class EmptyCart extends StatelessWidget {
 }
 
 class FullCart extends StatelessWidget {
-  const FullCart({Key key}) : super(key: key);
+  const FullCart({
+    Key key,
+    @required this.cartAttr,
+  }) : super(key: key);
+  final CartAttr cartAttr;
 
   @override
   Widget build(BuildContext context) {
     final theme = Provider.of<ThemeProvider>(context);
+    final cartProvider = Provider.of<CartProvider>(context);
+    double subTotal = cartAttr.product.price * cartAttr.quantity;
 
     return Container(
       height: 135,
@@ -83,8 +91,7 @@ class FullCart extends StatelessWidget {
             width: 130,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4PdHtXka2-bDDww6Nuect3Mt9IwpE4v4HNw&usqp=CAU'),
+                image: NetworkImage(cartAttr.product.imageUrl),
                 fit: BoxFit.fill,
               ),
             ),
@@ -99,7 +106,7 @@ class FullCart extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          "Title",
+                          cartAttr.product.title,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
@@ -133,7 +140,7 @@ class FullCart extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        '450\$',
+                        '${cartAttr.product.price}\$',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -148,7 +155,7 @@ class FullCart extends StatelessWidget {
                         width: 5,
                       ),
                       Text(
-                        '450\$',
+                        '${subTotal.toStringAsFixed(2)}\$',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -174,7 +181,10 @@ class FullCart extends StatelessWidget {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(4),
-                          onTap: () {},
+                          onTap: () {
+                            /// reduce
+                            cartProvider.reduceItemByOne(cartAttr.product);
+                          },
                           child: Container(
                             child: Padding(
                               padding: EdgeInsets.all(5),
@@ -202,7 +212,7 @@ class FullCart extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            "154",
+                            "${cartAttr.quantity}",
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -211,7 +221,10 @@ class FullCart extends StatelessWidget {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(4),
-                          onTap: () {},
+                          onTap: () {
+                            /// add
+                            cartProvider.addTocart(cartAttr.product);
+                          },
                           child: Container(
                             child: Padding(
                               padding: EdgeInsets.all(5),

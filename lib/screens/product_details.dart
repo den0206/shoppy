@@ -4,6 +4,7 @@ import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
@@ -85,7 +86,7 @@ class DetailProductPage extends StatelessWidget {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.9,
                           child: Text(
-                            "Title",
+                            "${product.title}",
                             maxLines: 2,
                             style: TextStyle(
                               fontSize: 28,
@@ -97,7 +98,7 @@ class DetailProductPage extends StatelessWidget {
                           height: 8,
                         ),
                         Text(
-                          "US \$15",
+                          "US \$ ${product.price}",
                           style: TextStyle(
                             color: ColorsConsts.subTitle,
                             // color: theme.darkMode
@@ -124,7 +125,7 @@ class DetailProductPage extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.all(16),
                           child: Text(
-                            "Description",
+                            product.description,
                             style: TextStyle(
                               fontWeight: FontWeight.w400,
                               fontSize: 21,
@@ -143,9 +144,14 @@ class DetailProductPage extends StatelessWidget {
                             height: 1,
                           ),
                         ),
-                        _Datails(title: "Brand", info: "Brand"),
-                        _Datails(title: "Quantyty", info: "Quantyty"),
-                        _Datails(title: "Category", info: "Category"),
+                        _Datails(
+                            title: "Brand", info: product.brand.toString()),
+                        _Datails(
+                            title: "Quantyty",
+                            info: product.quantity.toString()),
+                        _Datails(
+                            title: "Category",
+                            info: product.category.toString()),
                         _Datails(title: "Popularity", info: "Popularity"),
                         SizedBox(
                           height: 5,
@@ -281,7 +287,12 @@ class DetailProductPage extends StatelessWidget {
                           "Add Cart",
                           style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          final cartProvider =
+                              Provider.of<CartProvider>(context, listen: false);
+
+                          cartProvider.addTocart(product);
+                        },
                       ),
                     ),
                   ),

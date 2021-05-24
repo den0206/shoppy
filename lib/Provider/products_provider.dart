@@ -3,7 +3,7 @@ import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
 import 'package:shoppy/model/product.dart';
 
-class ProductsProvider extends ChangeNotifier {
+class ProductsProvider with ChangeNotifier {
   List<Product> _products = sampleProducts;
 
   List<Product> get products => _products;

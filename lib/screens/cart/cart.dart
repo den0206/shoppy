@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
+import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/screens/cart/cart_Widgets.dart';
 
 class CartScreen extends StatelessWidget {
@@ -10,14 +12,15 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List products = [];
+    final cartProvider = Provider.of<CartProvider>(context);
+    final cartItems = cartProvider.cartItems;
 
     return Scaffold(
-      bottomSheet: products.isEmpty ? null : _CheckoutSection(),
-      appBar: products.isEmpty
+      bottomSheet: cartItems.isEmpty ? null : _CheckoutSection(),
+      appBar: cartItems.isEmpty
           ? null
           : AppBar(
-              title: Text('${products.length}'),
+              title: Text('${cartItems.length}'),
               actions: [
                 IconButton(
                   icon: Icon(MyAppIcons.trash),
@@ -25,14 +28,15 @@ class CartScreen extends StatelessWidget {
                 )
               ],
             ),
-      body: products.isEmpty
+      body: cartItems.isEmpty
           ? EmptyCart()
           : Container(
               margin: EdgeInsets.only(bottom: 60),
               child: ListView.builder(
-                itemCount: 5,
+                itemCount: cartItems.length,
                 itemBuilder: (context, index) {
-                  return FullCart();
+                  final carAttr = cartItems.values.toList()[index];
+                  return FullCart(cartAttr: carAttr);
                 },
               ),
             ),
