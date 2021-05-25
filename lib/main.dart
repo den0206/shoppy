@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
+import 'package:shoppy/provider/wishlist_provider.dart';
 import 'package:shoppy/screens/bottom_bar.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
@@ -33,6 +34,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<CartProvider>(
           create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider<WishlistProvider>(
+          create: (context) => WishlistProvider(),
         )
       ],
       child: Consumer<ThemeProvider>(

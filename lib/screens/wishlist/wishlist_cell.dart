@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/wishlist_provider.dart';
 
 class WishListCell extends StatelessWidget {
-  const WishListCell({Key key}) : super(key: key);
+  const WishListCell({
+    Key key,
+    @required this.product,
+  }) : super(key: key);
 
+  final Product product;
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Container(
           width: double.infinity,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
           margin: EdgeInsets.only(right: 30, bottom: 10),
           child: Material(
             color: Theme.of(context).backgroundColor,
@@ -22,7 +30,7 @@ class WishListCell extends StatelessWidget {
                     Container(
                       height: 80,
                       child: Image.network(
-                        'https://abong.com.bd/public//admin/media/2020/03/yellow_mesh_men_sport_sneaker_shoesjpeg_20200307141459.jpeg',
+                        product.imageUrl,
                       ),
                     ),
                     SizedBox(
@@ -33,7 +41,7 @@ class WishListCell extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "title",
+                            product.title,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -43,7 +51,7 @@ class WishListCell extends StatelessWidget {
                             height: 20,
                           ),
                           Text(
-                            "\$ 16",
+                            "\$ ${product.price}",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -74,7 +82,8 @@ class WishListCell extends StatelessWidget {
                 Icons.clear,
                 color: Colors.white,
               ),
-              onPressed: () {},
+              onPressed: () =>
+                  context.read<WishlistProvider>().removeItem(product),
             ),
           ),
         ),

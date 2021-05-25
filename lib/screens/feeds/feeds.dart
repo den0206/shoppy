@@ -1,9 +1,17 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
+import 'package:shoppy/provider/wishlist_provider.dart';
+import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
+import 'package:shoppy/screens/wishlist/wishlist.dart';
 
 class Feeds extends StatelessWidget {
   const Feeds({Key key}) : super(key: key);
@@ -16,6 +24,55 @@ class Feeds extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Feeds"),
+        actions: [
+          Consumer<WishlistProvider>(
+            builder: (context, wishlist, child) {
+              return Badge(
+                badgeColor: ColorsConsts.cartBadgeColor,
+                animationType: BadgeAnimationType.slide,
+                toAnimate: true,
+                position: BadgePosition.topEnd(top: 5, end: 7),
+                badgeContent: Text(
+                  wishlist.favItems.length.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    MyAppIcons.wishlist,
+                    color: ColorsConsts.favColor,
+                  ),
+                  onPressed: () {
+                    navigateTo(context, WishListScreen.routeName);
+                  },
+                ),
+              );
+            },
+          ),
+          Consumer<CartProvider>(
+            builder: (context, cart, child) {
+              return Badge(
+                badgeColor: ColorsConsts.cartBadgeColor,
+                animationType: BadgeAnimationType.slide,
+                toAnimate: true,
+                position: BadgePosition.topEnd(top: 5, end: 7),
+                badgeContent: Text(
+                  cart.totalCount.toString(),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                child: IconButton(
+                  icon: Icon(MyAppIcons.cart, color: ColorsConsts.cartColor),
+                  onPressed: () {
+                    navigateTo(context, CartScreen.routeName);
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: GridView.count(
         crossAxisCount: 2,

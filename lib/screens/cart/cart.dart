@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/provider/cart_provider.dart';
@@ -20,11 +21,18 @@ class CartScreen extends StatelessWidget {
       appBar: cartItems.isEmpty
           ? null
           : AppBar(
-              title: Text('${cartItems.length}'),
+              title: Text('${cartProvider.totalCount}'),
               actions: [
                 IconButton(
                   icon: Icon(MyAppIcons.trash),
-                  onPressed: () {},
+                  onPressed: () {
+                    showAlert(
+                      context,
+                      "Remove All",
+                      "Would you liket Clear cart?",
+                      () => cartProvider.clearCart(),
+                    );
+                  },
                 )
               ],
             ),
@@ -49,6 +57,8 @@ class _CheckoutSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final totalAmmount = Provider.of<CartProvider>(context).totalAmount;
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -106,7 +116,7 @@ class _CheckoutSection extends StatelessWidget {
               ),
             ),
             Text(
-              "Sum \$179.0",
+              "Sum \$${totalAmmount.toStringAsFixed(2)}",
               style: TextStyle(
                 color: Colors.blue,
                 fontSize: 18,

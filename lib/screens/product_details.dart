@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
@@ -6,6 +7,7 @@ import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
+import 'package:shoppy/provider/wishlist_provider.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feed_products.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
@@ -255,19 +257,52 @@ class DetailProductPage extends StatelessWidget {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                 ),
                 actions: [
-                  IconButton(
-                    icon: Icon(
-                      MyAppIcons.wishlist,
-                      color: ColorsConsts.favColor,
-                    ),
-                    onPressed: () {
-                      navigateTo(context, WishListScreen.routeName);
+                  Consumer<WishlistProvider>(
+                    builder: (context, wishlist, child) {
+                      return Badge(
+                        badgeColor: ColorsConsts.cartBadgeColor,
+                        animationType: BadgeAnimationType.slide,
+                        toAnimate: true,
+                        position: BadgePosition.topEnd(top: 5, end: 7),
+                        badgeContent: Text(
+                          wishlist.favItems.length.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: IconButton(
+                          icon: Icon(
+                            MyAppIcons.wishlist,
+                            color: ColorsConsts.favColor,
+                          ),
+                          onPressed: () {
+                            navigateTo(context, WishListScreen.routeName);
+                          },
+                        ),
+                      );
                     },
                   ),
-                  IconButton(
-                    icon: Icon(MyAppIcons.cart, color: ColorsConsts.cartColor),
-                    onPressed: () {
-                      navigateTo(context, CartScreen.routeName);
+                  Consumer<CartProvider>(
+                    builder: (context, cart, child) {
+                      return Badge(
+                        badgeColor: ColorsConsts.cartBadgeColor,
+                        animationType: BadgeAnimationType.slide,
+                        toAnimate: true,
+                        position: BadgePosition.topEnd(top: 5, end: 7),
+                        badgeContent: Text(
+                          cart.totalCount.toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: IconButton(
+                          icon: Icon(MyAppIcons.cart,
+                              color: ColorsConsts.cartColor),
+                          onPressed: () {
+                            navigateTo(context, CartScreen.routeName);
+                          },
+                        ),
+                      );
                     },
                   ),
                 ],
@@ -291,6 +326,7 @@ class DetailProductPage extends StatelessWidget {
                           final cartProvider =
                               Provider.of<CartProvider>(context, listen: false);
 
+                          /// show alert;
                           cartProvider.addTocart(product);
                         },
                       ),
@@ -323,25 +359,34 @@ class DetailProductPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(
-                      color: Colors.grey,
-                      height: 70,
-                      child: TextButton(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              MyAppIcons.wishlist,
-                              color: Colors.white,
-                            ),
-                          ],
+                  Consumer<WishlistProvider>(
+                      builder: (context, wishlist, child) {
+                    return Expanded(
+                      flex: 1,
+                      child: Container(
+                        color: Colors.grey,
+                        height: 70,
+                        child: TextButton(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                wishlist.favItems.contains(product)
+                                    ? Icons.favorite
+                                    : MyAppIcons.wishlist,
+                                color: wishlist.favItems.contains(product)
+                                    ? Colors.red
+                                    : Colors.white,
+                              ),
+                            ],
+                          ),
+                          onPressed: () {
+                            wishlist.addAndRemoveFav(product);
+                          },
                         ),
-                        onPressed: () {},
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                 ],
               ),
             )

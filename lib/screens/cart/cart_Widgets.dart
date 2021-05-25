@@ -119,7 +119,9 @@ class FullCart extends StatelessWidget {
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(32),
-                          onTap: () {},
+                          onTap: () {
+                            cartProvider.removeItem(cartAttr.product);
+                          },
                           child: Container(
                             height: 50,
                             width: 50,
@@ -182,8 +184,13 @@ class FullCart extends StatelessWidget {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(4),
                           onTap: () {
+                            if (cartAttr.quantity == 1) {
+                              cartProvider.removeItem(cartAttr.product);
+                            } else {
+                              cartProvider.reduceItemByOne(cartAttr.product);
+                            }
+
                             /// reduce
-                            cartProvider.reduceItemByOne(cartAttr.product);
                           },
                           child: Container(
                             child: Padding(

@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/model/product.dart';
+import 'package:shoppy/screens/feeds/feed_dialog.dart';
 import 'package:shoppy/screens/product_details.dart';
 
 class FeedProducts extends StatelessWidget {
@@ -111,7 +112,14 @@ class FeedProducts extends StatelessWidget {
                         Material(
                           color: Colors.transparent,
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return FeedDialog(product: product);
+                                },
+                              );
+                            },
                             borderRadius: BorderRadius.circular(18),
                             child: Icon(Icons.more_horiz, color: Colors.grey),
                           ),
