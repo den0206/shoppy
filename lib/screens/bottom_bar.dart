@@ -4,7 +4,7 @@ import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/feeds.dart';
 import 'package:shoppy/screens/home.dart';
-import 'package:shoppy/screens/search.dart';
+import 'package:shoppy/screens/serach/search.dart';
 import 'package:shoppy/screens/userInfo/user_info.dart';
 
 class BottomBarModel extends ChangeNotifier {

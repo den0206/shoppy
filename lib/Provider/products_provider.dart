@@ -28,4 +28,12 @@ class ProductsProvider with ChangeNotifier {
 
     return _brandList;
   }
+
+  List<Product> findByQuery(String searchText) {
+    List _queryList = _products
+        .where((element) =>
+            element.title.toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
+    return _queryList;
+  }
 }
