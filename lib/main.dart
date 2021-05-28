@@ -4,11 +4,14 @@ import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/provider/wishlist_provider.dart';
+import 'package:shoppy/screens/auth/login.dart';
+import 'package:shoppy/screens/auth/signup.dart';
 import 'package:shoppy/screens/bottom_bar.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/category_feeds.dart';
 import 'package:shoppy/screens/feeds/feeds.dart';
+import 'package:shoppy/screens/landing_page.dart';
 import 'package:shoppy/screens/product_details.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
 
@@ -45,6 +48,8 @@ class MyApp extends StatelessWidget {
             title: 'Flutter Demo',
             theme: themeData.buildTheme(),
             routes: {
+              LoginPgge.routeName: (context) => LoginPgge(),
+              SignupPage.routeName: (context) => SignupPage(),
               CartScreen.routeName: (context) => CartScreen(),
               Feeds.routeName: (context) => Feeds(),
               WishListScreen.routeName: (context) => WishListScreen(),
@@ -52,7 +57,7 @@ class MyApp extends StatelessWidget {
               DetailProductPage.routeName: (context) => DetailProductPage(),
               CategoryFeeds.routeName: (context) => CategoryFeeds(),
             },
-            home: BottomBarScreen(),
+            home: LandingPage(),
           );
         },
       ),
