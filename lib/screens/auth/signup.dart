@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:image_picker/image_picker.dart';
@@ -161,6 +162,10 @@ class SignupPage extends StatelessWidget {
                               labelText: "Phone",
                               inputType: TextInputType.phone,
                               validator: validPhone,
+                              inputFormatter: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                              ],
                               inputAction: TextInputAction.next,
                               onChange: (value) => model.phoneController,
                               prefixIcon: Icon(

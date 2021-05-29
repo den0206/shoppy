@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void navigateTo(BuildContext ctx, String routeName) {
   Navigator.of(ctx).pushNamed(
@@ -211,6 +212,7 @@ class CustomTextFields extends StatelessWidget {
     this.suffixIcon,
     this.onEditingComplete,
     this.focusNode,
+    this.inputFormatter,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -222,6 +224,8 @@ class CustomTextFields extends StatelessWidget {
   final Function() onEditingComplete;
   final TextInputAction inputAction;
   final FocusNode focusNode;
+
+  final List<TextInputFormatter> inputFormatter;
 
   final Widget prefixIcon;
   final Widget suffixIcon;
@@ -245,6 +249,7 @@ class CustomTextFields extends StatelessWidget {
       onEditingComplete: onEditingComplete,
       onChanged: onChange,
       obscureText: isSecure,
+      inputFormatters: inputFormatter,
     );
   }
 }
