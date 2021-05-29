@@ -9,7 +9,6 @@ import 'package:shoppy/screens/userInfo/user_info.dart';
 
 class BottomBarModel extends ChangeNotifier {
   int _currentIndex = 0;
-
   int get currentIndex => _currentIndex;
 
   void setIndex(int index) {
@@ -20,6 +19,8 @@ class BottomBarModel extends ChangeNotifier {
 
 class BottomBarScreen extends StatelessWidget {
   const BottomBarScreen({Key key}) : super(key: key);
+
+  static const routeName = '/BottombarScreen';
 
   @override
   Widget build(BuildContext context) {

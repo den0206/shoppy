@@ -11,8 +11,8 @@ import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/feeds/category_feeds.dart';
 import 'package:shoppy/screens/feeds/feeds.dart';
-import 'package:shoppy/screens/landing_page.dart';
 import 'package:shoppy/screens/product_details.dart';
+import 'package:shoppy/screens/upload_product_page.dart';
 import 'package:shoppy/screens/wishlist/wishlist.dart';
 
 void main() {
@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
             routes: {
               LoginPgge.routeName: (context) => LoginPgge(),
               SignupPage.routeName: (context) => SignupPage(),
+              BottomBarScreen.routeName: (context) => BottomBarScreen(),
               CartScreen.routeName: (context) => CartScreen(),
               Feeds.routeName: (context) => Feeds(),
               WishListScreen.routeName: (context) => WishListScreen(),
@@ -57,7 +58,8 @@ class MyApp extends StatelessWidget {
               DetailProductPage.routeName: (context) => DetailProductPage(),
               CategoryFeeds.routeName: (context) => CategoryFeeds(),
             },
-            home: LandingPage(),
+            // home: LandingPage(),
+            home: UploadProductPage(),
           );
         },
       ),

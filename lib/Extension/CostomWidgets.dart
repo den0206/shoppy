@@ -6,6 +6,30 @@ void navigateTo(BuildContext ctx, String routeName) {
   );
 }
 
+class BackButtonWithStack extends StatelessWidget {
+  const BackButtonWithStack({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0.0,
+      left: 0.0,
+      right: 0.0,
+      child: AppBar(
+        title: Text(''), // You can add title here
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        backgroundColor: Colors.transparent, //You can make this transparent
+        elevation: 0.0, //No shadow
+      ),
+    );
+  }
+}
+
 Future showAlert(
   BuildContext context,
   String title,
@@ -46,6 +70,38 @@ Future showAlert(
       );
     },
   );
+}
+
+class GradientIcon extends StatelessWidget {
+  const GradientIcon({
+    Key key,
+    this.icon,
+    this.size,
+    this.gradient,
+  }) : super(key: key);
+
+  final IconData icon;
+  final double size;
+  final Gradient gradient;
+
+  @override
+  Widget build(BuildContext context) {
+    return ShaderMask(
+      child: SizedBox(
+        width: size * 1.2,
+        height: size * 1.2,
+        child: Icon(
+          icon,
+          size: size,
+          color: Colors.white,
+        ),
+      ),
+      shaderCallback: (bounds) {
+        final Rect rect = Rect.fromLTRB(0, 0, size, size);
+        return gradient.createShader(rect);
+      },
+    );
+  }
 }
 
 class CustomButton extends StatelessWidget {
@@ -181,7 +237,7 @@ class CustomTextFields extends StatelessWidget {
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         labelText: labelText,
-        fillColor: Theme.of(context).backgroundColor,
+        // fillColor: Theme.of(context).backgroundColor,
       ),
       keyboardType: inputType,
       textInputAction: inputAction,

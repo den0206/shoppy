@@ -5,6 +5,7 @@ import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/screens/auth/login.dart';
 import 'package:shoppy/screens/auth/signup.dart';
+import 'package:shoppy/screens/bottom_bar.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key key}) : super(key: key);
@@ -225,7 +226,10 @@ class _LandingPageState extends State<LandingPage>
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pushNamed(BottomBarScreen.routeName);
+                    },
                     child: Text(
                       'guest',
                       style: TextStyle(color: Colors.black),

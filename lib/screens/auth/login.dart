@@ -145,7 +145,8 @@ class LoginPgge extends StatelessWidget {
                 },
               ),
             ],
-          )
+          ),
+          BackButtonWithStack(),
         ],
       ),
     );
