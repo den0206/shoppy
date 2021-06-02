@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/ImagePickerFunction.dart';
 import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
@@ -38,26 +36,9 @@ class UploadProductModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future assetImage(BuildContext context) async {
-    List<Asset> resultList = <Asset>[];
-
+  Future assetImage() async {
     try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 1,
-        selectedAssets: resultList,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-
-      var path2 = await FlutterAbsolutePath.getAbsolutePath(
-          resultList.first.identifier);
-      final file = File(path2);
+      final file = await setGalleryImage();
       productImage = file;
       notifyListeners();
     } on Exception catch (e) {
@@ -65,11 +46,9 @@ class UploadProductModel with ChangeNotifier {
     }
   }
 
-  Future cameraImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickImage = await picker.getImage(source: ImageSource.camera);
-    final pickedImageFile = File(pickImage.path);
-    productImage = pickedImageFile;
+  Future cameraImage() async {
+    final file = await openCamera();
+    productImage = file;
     notifyListeners();
   }
 
@@ -227,7 +206,7 @@ class UploadProductPage extends StatelessWidget {
                                       FittedBox(
                                         child: CustomIconButton(
                                           onPressed: () {
-                                            model.cameraImage(context);
+                                            model.cameraImage();
                                           },
                                           backColor:
                                               Theme.of(context).backgroundColor,
@@ -254,7 +233,7 @@ class UploadProductPage extends StatelessWidget {
                                       FittedBox(
                                         child: CustomIconButton(
                                           onPressed: () {
-                                            model.assetImage(context);
+                                            model.assetImage();
                                           },
                                           backColor:
                                               Theme.of(context).backgroundColor,

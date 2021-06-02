@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:list_tile_switch/list_tile_switch.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/provider/userState.dart';
 import 'package:shoppy/screens/userInfo/userInfo_widget.dart';
 
 const List<IconData> _userTileIcons = [
@@ -91,8 +93,11 @@ class _UserInfoState extends State<UserInfo> {
                                       shape: BoxShape.circle,
                                       image: DecorationImage(
                                         fit: BoxFit.fill,
-                                        image: NetworkImage(
-                                            'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                                        image: currentUser != null
+                                            ? CachedNetworkImageProvider(
+                                                currentUser.imageUrl)
+                                            : NetworkImage(
+                                                'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
                                       ),
                                     ),
                                   ),
@@ -110,8 +115,10 @@ class _UserInfoState extends State<UserInfo> {
                           ],
                         ),
                         background: Image(
-                          image: NetworkImage(
-                              'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
+                          image: currentUser != null
+                              ? CachedNetworkImageProvider(currentUser.imageUrl)
+                              : NetworkImage(
+                                  'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg'),
                           fit: BoxFit.fill,
                         ),
                       ),
@@ -131,7 +138,7 @@ class _UserInfoState extends State<UserInfo> {
                     ),
                     UserListTile(
                       title: "Email",
-                      subtitle: "@",
+                      subtitle: currentUser != null ? currentUser.email : "@",
                       icon: Icon(_userTileIcons[0]),
                       ontap: () {
                         print("Email");
@@ -169,9 +176,16 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                     ),
                     UserListTile(
-                        title: "Logout",
-                        subtitle: "",
-                        icon: Icon(_userTileIcons[4]))
+                      title: "Logout",
+                      subtitle: "",
+                      icon: Icon(_userTileIcons[4]),
+                      ontap: () {
+                        final userState =
+                            Provider.of<UserState>(context, listen: false);
+
+                        userState.logout();
+                      },
+                    )
                   ],
                 ),
               )

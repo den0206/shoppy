@@ -1,6 +1,7 @@
 import 'package:backdrop/app_bar.dart';
 import 'package:backdrop/button.dart';
 import 'package:backdrop/scaffold.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
@@ -13,6 +14,7 @@ import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/products_provider.dart';
+import 'package:shoppy/provider/userState.dart';
 import 'package:shoppy/screens/brandRails/brand_rails.dart';
 import 'package:shoppy/screens/cart/cart.dart';
 import 'package:shoppy/screens/category/categoryScreen.dart';
@@ -56,9 +58,11 @@ class Home extends StatelessWidget {
                 backgroundColor: Colors.white,
                 child: CircleAvatar(
                   radius: 13,
-                  backgroundImage: NetworkImage(
-                    'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg',
-                  ),
+                  backgroundImage: currentUser != null
+                      ? CachedNetworkImageProvider(currentUser.imageUrl)
+                      : NetworkImage(
+                          'https://cdn1.vectorstock.com/i/thumb-large/62/60/default-avatar-photo-placeholder-profile-image-vector-21666260.jpg',
+                        ),
                 ),
               ),
               onPressed: () {},

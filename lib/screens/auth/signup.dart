@@ -1,26 +1,83 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/ImagePickerFunction.dart';
+import 'package:shoppy/Extension/StoregeFunction.dart';
+import 'package:shoppy/Extension/firebaseRef.dart';
 import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/consts/colors.dart';
+import 'package:shoppy/model/FBUser.dart';
+import 'package:shoppy/provider/userState.dart';
 import 'package:shoppy/screens/auth/login.dart';
 
 class SignUpPageModel with ChangeNotifier {
   TextEditingController nameController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+
   File userImage;
 
+  final _auth = FirebaseAuth.instance;
+  String get name => nameController.text;
+  String get password => passwordController.text;
+  String get email => emailController.text.toLowerCase().trim();
+  int get phone => int.parse(phoneController.text.trim());
+
+  bool isLoading = false;
   bool passwordSecure = true;
+
+  Future<void> signUpUser({
+    @required void Function(FBUser user) onSuccess,
+    @required void Function(Exception e) errorCallback,
+  }) async {
+    if (userImage == null) {
+      Exception error = Exception("No Image");
+      errorCallback(error);
+
+      return;
+    }
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      UserCredential _credential = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+
+      if (_credential != null) {
+        final uid = _credential.user.uid;
+
+        String imageUrl =
+            await uploadStorage(StorageRef.userImage, "$uid", userImage);
+
+        FBUser user = FBUser(
+          uid: uid,
+          name: name,
+          email: email,
+          imageUrl: imageUrl,
+        );
+
+        firebaseReference(FirebaseRef.user)
+            .doc(user.uid)
+            .set(user.toMap())
+            .whenComplete(() {
+          currentUser = user;
+          onSuccess(user);
+        });
+      }
+    } catch (e) {
+      errorCallback(e);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   void changeSecure() {
     passwordSecure = !passwordSecure;
@@ -28,25 +85,8 @@ class SignUpPageModel with ChangeNotifier {
   }
 
   Future assetImage(BuildContext context) async {
-    List<Asset> resultList = <Asset>[];
-
     try {
-      resultList = await MultiImagePicker.pickImages(
-        maxImages: 1,
-        selectedAssets: resultList,
-        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
-        materialOptions: MaterialOptions(
-          actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
-          allViewTitle: "All Photos",
-          useDetailsView: false,
-          selectCircleStrokeColor: "#000000",
-        ),
-      );
-
-      var path2 = await FlutterAbsolutePath.getAbsolutePath(
-          resultList.first.identifier);
-      final file = File(path2);
+      final file = await setGalleryImage();
       userImage = file;
       notifyListeners();
       Navigator.of(context).pop();
@@ -56,10 +96,8 @@ class SignUpPageModel with ChangeNotifier {
   }
 
   Future cameraImage(BuildContext context) async {
-    final picker = ImagePicker();
-    final pickImage = await picker.getImage(source: ImageSource.camera);
-    final pickedImageFile = File(pickImage.path);
-    userImage = pickedImageFile;
+    final file = await openCamera();
+    userImage = file;
     notifyListeners();
     Navigator.of(context).pop();
   }
@@ -162,23 +200,29 @@ class SignupPage extends StatelessWidget {
                               labelText: "Phone",
                               inputType: TextInputType.phone,
                               validator: validPhone,
-                              inputFormatter: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9]')),
-                              ],
+                              inputFormatter: numberFormatter,
                               inputAction: TextInputAction.next,
                               onChange: (value) => model.phoneController,
                               prefixIcon: Icon(
                                 Icons.phone_android,
                               ),
                               onEditingComplete: () {
-                                print("Sign up");
+                                if (_formKey.currentState.validate()) {
+                                  FocusScope.of(context).unfocus();
+                                  model.signUpUser(
+                                    onSuccess: (user) {},
+                                    errorCallback: (e) {
+                                      showErrorAlert(context, e);
+                                    },
+                                  );
+                                }
                               },
                             ),
                             SizedBox(
                               height: 20,
                             ),
                             CustomIconButton(
+                              isLoading: model.isLoading,
                               widget: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -200,6 +244,16 @@ class SignupPage extends StatelessWidget {
                               onPressed: () {
                                 if (_formKey.currentState.validate()) {
                                   FocusScope.of(context).unfocus();
+
+                                  model.signUpUser(
+                                    onSuccess: (user) {
+                                      if (Navigator.canPop(context))
+                                        Navigator.pop(context);
+                                    },
+                                    errorCallback: (e) {
+                                      showErrorAlert(context, e);
+                                    },
+                                  );
                                 }
                               },
                             )
