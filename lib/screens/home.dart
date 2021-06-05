@@ -352,7 +352,7 @@ class BackLayerMenu extends StatelessWidget {
                     title: "Cart",
                     index: 1,
                     onTap: () {
-                      navigateTo(context, CartScreen.routeName);
+                      navigateTo(context, CartPage.routeName);
                     },
                   ),
                   SizedBox(

@@ -116,7 +116,7 @@ class SearchByHeader extends SliverPersistentHeaderDelegate {
                         icon: Icon(MyAppIcons.cart,
                             color: ColorsConsts.cartColor),
                         onPressed: () {
-                          navigateTo(context, CartScreen.routeName);
+                          navigateTo(context, CartPage.routeName);
                         },
                       ),
                     );

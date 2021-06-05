@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
+import 'package:shoppy/another_shop/provider/cart_manager.dart';
+import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
+import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/product_screen.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/provider/userState.dart';
@@ -66,7 +70,7 @@ class MyApp extends StatelessWidget {
               SignupPage.routeName: (context) => SignupPage(),
               SwipePage.routeName: (context) => SwipePage(),
               BottomBarScreen.routeName: (context) => BottomBarScreen(),
-              CartScreen.routeName: (context) => CartScreen(),
+              CartPage.routeName: (context) => CartPage(),
               Feeds.routeName: (context) => Feeds(),
               WishListScreen.routeName: (context) => WishListScreen(),
               BrandNavigationRail.routeName: (context) => BrandNavigationRail(),
@@ -129,6 +133,15 @@ class Shop2 extends StatelessWidget {
           create: (context) => ProductManager(),
           lazy: false,
         ),
+        Provider<HomeManager>(
+          create: (context) => HomeManager(),
+          lazy: false,
+        ),
+        ChangeNotifierProxyProvider<UserState, CartManager>(
+          create: (context) => CartManager(),
+          update: (_, userManager, cartManager) =>
+              cartManager..updateUser(userManager),
+        ),
       ],
       child: MaterialApp(
         title: "Shop2",
@@ -139,6 +152,10 @@ class Shop2 extends StatelessWidget {
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
+        routes: {
+          ProductScreen.routeName: (context) => ProductScreen(),
+          CartScreen.routeName: (context) => CartScreen(),
+        },
         home: BaseScreen(),
       ),
     );

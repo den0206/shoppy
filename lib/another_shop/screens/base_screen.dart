@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/another_shop/Common/custom_drawer.dart';
-import 'package:shoppy/another_shop/screens/product_screen.dart';
+import 'package:shoppy/another_shop/screens/home_screen.dart';
+import 'package:shoppy/another_shop/screens/products_screen.dart';
 
 class PageManager {
   PageManager(this._pageController);
@@ -27,13 +28,8 @@ class BaseScreen extends StatelessWidget {
         controller: pageController,
         physics: NeverScrollableScrollPhysics(),
         children: [
-          Scaffold(
-            appBar: AppBar(
-              title: Text('Home'),
-            ),
-            drawer: CustomDrawer(),
-          ),
-          ProductScreen(),
+          HomeScreen(),
+          ProductsScreen(),
           Scaffold(
             appBar: AppBar(
               title: Text('Home3'),

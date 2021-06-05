@@ -28,7 +28,7 @@ class BottomBarScreen extends StatelessWidget {
       Home(),
       Feeds(),
       Search(),
-      CartScreen(),
+      CartPage(),
       UserInfo(),
     ];
 

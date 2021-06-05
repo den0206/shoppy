@@ -6,8 +6,8 @@ import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/screens/cart/cart_Widgets.dart';
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({Key key}) : super(key: key);
+class CartPage extends StatelessWidget {
+  const CartPage({Key key}) : super(key: key);
 
   static const routeName = '/CartScreen';
 

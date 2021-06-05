@@ -209,6 +209,39 @@ class CustomTextFields extends StatelessWidget {
   }
 }
 
+class CircleiconButton extends StatelessWidget {
+  const CircleiconButton({
+    Key key,
+    this.iconData,
+    this.color,
+    this.onTap,
+  }) : super(key: key);
+
+  final IconData iconData;
+  final Color color;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(50),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: EdgeInsets.all(5),
+            child: Icon(
+              iconData,
+              color: color,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class OverlayLoadingWidget extends StatelessWidget {
   const OverlayLoadingWidget({
     Key key,

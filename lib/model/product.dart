@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:shoppy/another_shop/model/item_size.dart';
 
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
 
-class Product {
+class Product with ChangeNotifier {
   Product({
     @required this.id,
     @required this.title,
@@ -19,11 +20,15 @@ class Product {
     this.images,
   });
 
-  Product.frommDocumant(DocumentSnapshot document) {
+  Product.fromDocumant(DocumentSnapshot document) {
     id = document.id;
     title = document[ProductKey.title];
     description = document[ProductKey.description];
     images = List<String>.from(document[ProductKey.images] as List<dynamic>);
+
+    sizes = (document[ProductKey.sizes] as List<dynamic> ?? [])
+        .map((s) => ItemSize.fromMap(s as Map<String, dynamic>))
+        .toList();
   }
 
   String id;
@@ -36,7 +41,36 @@ class Product {
   int quantity;
   bool isFavorite;
   bool isPopular;
+
   List<String> images;
+  List<ItemSize> sizes;
+  ItemSize _selectedSize;
+  ItemSize get selectedSize => _selectedSize;
+  set selectedSize(ItemSize value) {
+    _selectedSize = value;
+    notifyListeners();
+  }
+
+  int get totalStock {
+    int stock = 0;
+    for (final size in sizes) {
+      stock += size.stock;
+    }
+
+    return stock;
+  }
+
+  bool get hasStock {
+    return totalStock > 0;
+  }
+
+  ItemSize findSize(String title) {
+    try {
+      return sizes.firstWhere((s) => s.title == title);
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 class ProductKey {
@@ -49,6 +83,8 @@ class ProductKey {
   static final brand = "brand";
   static final quantity = "quantity";
   static final isPopular = "isPopular";
+
+  static final sizes = "sizes";
 }
 
 List<Product> sampleProducts = [

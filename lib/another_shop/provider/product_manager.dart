@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shoppy/model/product.dart';
@@ -33,11 +31,11 @@ class ProductManager with ChangeNotifier {
     _loadAllProduct();
   }
 
-  Future<Void> _loadAllProduct() async {
+  Future<void> _loadAllProduct() async {
     final QuerySnapshot snapshots = await firestore.collection("product").get();
 
     allProduct = snapshots.docs
-        .map((document) => Product.frommDocumant(document))
+        .map((document) => Product.fromDocumant(document))
         .toList();
 
     notifyListeners();
