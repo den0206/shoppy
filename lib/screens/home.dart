@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
-import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/model/category.dart';

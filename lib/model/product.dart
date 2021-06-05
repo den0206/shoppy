@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,9 +14,17 @@ class Product {
     @required this.imageUrl,
     @required this.category,
     @required this.brand,
-    @required this.quantity,
-    @required this.isPopular,
+    this.quantity,
+    this.isPopular,
+    this.images,
   });
+
+  Product.frommDocumant(DocumentSnapshot document) {
+    id = document.id;
+    title = document[ProductKey.title];
+    description = document[ProductKey.description];
+    images = List<String>.from(document[ProductKey.images] as List<dynamic>);
+  }
 
   String id;
   String title;
@@ -27,6 +36,19 @@ class Product {
   int quantity;
   bool isFavorite;
   bool isPopular;
+  List<String> images;
+}
+
+class ProductKey {
+  static final id = "id";
+  static final title = "title";
+  static final description = "description";
+  static final imageUrl = "imageUrl";
+  static final images = "images";
+  static final price = "price";
+  static final brand = "brand";
+  static final quantity = "quantity";
+  static final isPopular = "isPopular";
 }
 
 List<Product> sampleProducts = [

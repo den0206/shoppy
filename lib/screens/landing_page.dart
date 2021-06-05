@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/screens/auth/login.dart';
 import 'package:shoppy/screens/auth/signup.dart';
@@ -24,6 +26,9 @@ class _LandingPageState extends State<LandingPage>
     'https://e-shopy.org/wp-content/uploads/2020/08/shop.jpeg',
     'https://e-shopy.org/wp-content/uploads/2020/08/shop.jpeg',
   ];
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -49,6 +54,22 @@ class _LandingPageState extends State<LandingPage>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  void _loginAnonymous() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      _auth.signInAnonymously();
+    } catch (error) {
+      showErrorAlert(context, error);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -227,6 +248,7 @@ class _LandingPageState extends State<LandingPage>
                       ),
                     ),
                     onPressed: () {
+                      // _loginAnonymous();
                       Navigator.of(context).pushNamed(SwipePage.routeName);
                     },
                     child: Text(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
+import 'package:shoppy/another_shop/provider/product_manager.dart';
+import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/provider/userState.dart';
@@ -24,7 +26,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MyApp());
+  // runApp(MyApp());
+  runApp(Shop2());
 }
 
 class MyApp extends StatelessWidget {
@@ -111,6 +114,33 @@ class UserCheckPage extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class Shop2 extends StatelessWidget {
+  const Shop2({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ProductManager>(
+          create: (context) => ProductManager(),
+          lazy: false,
+        ),
+      ],
+      child: MaterialApp(
+        title: "Shop2",
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primaryColor: const Color.fromARGB(255, 4, 125, 141),
+          scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
+          appBarTheme: const AppBarTheme(elevation: 0),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: BaseScreen(),
+      ),
     );
   }
 }

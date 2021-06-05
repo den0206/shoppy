@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/provider/wishlist_provider.dart';
 import 'package:shoppy/screens/wishlist/wishlist_cell.dart';

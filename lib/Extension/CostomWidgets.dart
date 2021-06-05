@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-void navigateTo(BuildContext ctx, String routeName) {
-  Navigator.of(ctx).pushNamed(
-    routeName,
-  );
-}
-
 class BackButtonWithStack extends StatelessWidget {
   const BackButtonWithStack({
     Key key,
@@ -29,83 +23,6 @@ class BackButtonWithStack extends StatelessWidget {
       ),
     );
   }
-}
-
-Future showAlert(
-  BuildContext context,
-  String title,
-  String subtitle,
-  Function() ontap,
-) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 6.0),
-              child: Image.network(
-                'https://image.flaticon.com/icons/png/128/564/564619.png',
-                height: 20,
-                width: 20,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(title),
-            ),
-          ],
-        ),
-        content: Text(subtitle),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(context), child: Text('Cancel')),
-          TextButton(
-              onPressed: () {
-                ontap();
-                Navigator.pop(context);
-              },
-              child: Text('ok'))
-        ],
-      );
-    },
-  );
-}
-
-Future showErrorAlert(BuildContext context, dynamic error) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.only(right: 6),
-              child: Image.network(
-                'https://image.flaticon.com/icons/png/128/564/564619.png',
-                height: 20,
-                width: 20,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Text("Error"),
-            ),
-          ],
-        ),
-        content: Text(error.message),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("OK"),
-          )
-        ],
-      );
-    },
-  );
 }
 
 class GradientIcon extends StatelessWidget {
@@ -248,6 +165,7 @@ class CustomTextFields extends StatelessWidget {
     this.onEditingComplete,
     this.focusNode,
     this.inputFormatter,
+    this.enable,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -259,6 +177,7 @@ class CustomTextFields extends StatelessWidget {
   final Function() onEditingComplete;
   final TextInputAction inputAction;
   final FocusNode focusNode;
+  final bool enable;
 
   final List<TextInputFormatter> inputFormatter;
 
@@ -279,6 +198,7 @@ class CustomTextFields extends StatelessWidget {
         // fillColor: Theme.of(context).backgroundColor,
       ),
       keyboardType: inputType,
+      enabled: enable,
       textInputAction: inputAction,
       validator: validator,
       onEditingComplete: onEditingComplete,

@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:wave/config.dart';
@@ -40,6 +42,10 @@ class LoginPageModel with ChangeNotifier {
       isLoading = false;
       notifyListeners();
     }
+
+    // on PlatformException catch (e) {
+    //   errorCallback(getErrorString(e.code));
+    // }
   }
 
   void changeSecure() {
@@ -58,144 +64,153 @@ class LoginPgge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Wave(),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height / 4,
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 10,
+      body: GestureDetector(
+        onTap: () {
+          dismissKeybourd(context);
+        },
+        child: Stack(
+          children: [
+            Wave(),
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 4,
                   ),
-                  height: 120,
-                  width: 120,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        'https://image.flaticon.com/icons/png/128/869/869636.png',
-                      ),
-                      fit: BoxFit.fill,
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 10,
                     ),
-                    shape: BoxShape.rectangle,
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          'https://image.flaticon.com/icons/png/128/869/869636.png',
+                        ),
+                        fit: BoxFit.fill,
+                      ),
+                      shape: BoxShape.rectangle,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                ChangeNotifierProvider<LoginPageModel>(
-                  create: (context) => LoginPageModel(),
-                  builder: (context, snapshot) {
-                    return Consumer<LoginPageModel>(
-                      builder: (context, model, child) {
-                        return Padding(
-                          padding: const EdgeInsets.all(14.0),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                CustomTextFields(
-                                  controller: model.emailController,
-                                  labelText: "Email",
-                                  inputType: TextInputType.emailAddress,
-                                  validator: validateEmail,
-                                  inputAction: TextInputAction.next,
-                                  onEditingComplete: () =>
-                                      FocusScope.of(context)
-                                          .requestFocus(_passwordFocusNode),
-                                  onChange: (value) => model.emailController,
-                                  prefixIcon: Icon(
-                                    Icons.email,
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ChangeNotifierProvider<LoginPageModel>(
+                    create: (context) => LoginPageModel(),
+                    builder: (context, snapshot) {
+                      return Consumer<LoginPageModel>(
+                        builder: (context, model, child) {
+                          return Padding(
+                            padding: const EdgeInsets.all(14.0),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  CustomTextFields(
+                                    controller: model.emailController,
+                                    labelText: "Email",
+                                    inputType: TextInputType.emailAddress,
+                                    validator: validateEmail,
+                                    enable: !model.isLoading,
+                                    inputAction: TextInputAction.next,
+                                    onEditingComplete: () =>
+                                        FocusScope.of(context)
+                                            .requestFocus(_passwordFocusNode),
+                                    onChange: (value) => model.emailController,
+                                    prefixIcon: Icon(
+                                      Icons.email,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                CustomTextFields(
-                                  controller: model.passwordController,
-                                  focusNode: _passwordFocusNode,
-                                  isSecure: model.passwordSecure,
-                                  labelText: "Password",
-                                  inputType: null,
-                                  validator: validPassword,
-                                  onChange: (value) => model.passwordController,
-                                  prefixIcon: Icon(
-                                    Icons.lock,
+                                  SizedBox(
+                                    height: 10,
                                   ),
-                                  suffixIcon: IconButton(
-                                    onPressed: model.changeSecure,
-                                    icon: Icon(model.passwordSecure
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                                  CustomTextFields(
+                                    controller: model.passwordController,
+                                    focusNode: _passwordFocusNode,
+                                    isSecure: model.passwordSecure,
+                                    labelText: "Password",
+                                    enable: !model.isLoading,
+                                    inputType: null,
+                                    validator: validPassword,
+                                    onChange: (value) =>
+                                        model.passwordController,
+                                    prefixIcon: Icon(
+                                      Icons.lock,
+                                    ),
+                                    suffixIcon: IconButton(
+                                      onPressed: model.changeSecure,
+                                      icon: Icon(model.passwordSecure
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
+                                    onEditingComplete: () {
+                                      if (_formKey.currentState.validate()) {
+                                        FocusScope.of(context).unfocus();
+                                        model.loginUser(
+                                          onSuccess: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          errorCallback: (e) {
+                                            showErrorAlert(context, e);
+                                          },
+                                        );
+                                      }
+                                    },
                                   ),
-                                  onEditingComplete: () {
-                                    if (_formKey.currentState.validate()) {
-                                      FocusScope.of(context).unfocus();
-                                      model.loginUser(
-                                        onSuccess: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        errorCallback: (e) {
-                                          showErrorAlert(context, e);
-                                        },
-                                      );
-                                    }
-                                  },
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                CustomIconButton(
-                                  isLoading: model.isLoading,
-                                  widget: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Login',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 17),
-                                      ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Icon(
-                                        Feather.user,
-                                        size: 18,
-                                      )
-                                    ],
+                                  SizedBox(
+                                    height: 20,
                                   ),
-                                  onPressed: () {
-                                    if (_formKey.currentState.validate()) {
-                                      FocusScope.of(context).unfocus();
-                                      model.loginUser(
-                                        onSuccess: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        errorCallback: (e) {
-                                          showErrorAlert(context, e);
-                                        },
-                                      );
-                                    }
-                                  },
-                                )
-                              ],
+                                  CustomIconButton(
+                                    isLoading: model.isLoading,
+                                    widget: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Login',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          Feather.user,
+                                          size: 18,
+                                        )
+                                      ],
+                                    ),
+                                    onPressed: () {
+                                      if (_formKey.currentState.validate()) {
+                                        FocusScope.of(context).unfocus();
+                                        model.loginUser(
+                                          onSuccess: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          errorCallback: (e) {
+                                            showErrorAlert(context, e);
+                                          },
+                                        );
+                                      }
+                                    },
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          BackButtonWithStack(),
-        ],
+            BackButtonWithStack(),
+          ],
+        ),
       ),
     );
   }
