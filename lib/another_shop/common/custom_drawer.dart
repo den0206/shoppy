@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shoppy/another_shop/screens/base_screen.dart';
+import 'package:shoppy/another_shop/provider/page_manager.dart';
+import 'package:shoppy/provider/userState.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key key}) : super(key: key);
@@ -44,11 +45,37 @@ class CustomDrawer extends StatelessWidget {
                 title: "Location",
                 page: 3,
               ),
+              AdminSpace(),
             ],
           ),
         ],
       ),
     );
+  }
+}
+
+class AdminSpace extends StatelessWidget {
+  const AdminSpace({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return adminEnable
+        ? Column(
+            children: [
+              Divider(),
+              DrawerTile(
+                iconData: Icons.settings,
+                title: "Setting",
+                page: 4,
+              ),
+              DrawerTile(
+                iconData: Icons.settings,
+                title: "Setting2",
+                page: 5,
+              ),
+            ],
+          )
+        : Container();
   }
 }
 
@@ -78,7 +105,10 @@ class CustomDrawerHeader extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              context.read<PageManager>().setPage(0);
+              context.read<UserState>().logout();
+            },
             child: Text(
               "Logout",
               style: TextStyle(

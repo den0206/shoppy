@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shoppy/Extension/firebaseRef.dart';
 import 'package:shoppy/model/product.dart';
 
 class ProductManager with ChangeNotifier {
@@ -32,12 +33,21 @@ class ProductManager with ChangeNotifier {
   }
 
   Future<void> _loadAllProduct() async {
-    final QuerySnapshot snapshots = await firestore.collection("product").get();
+    final QuerySnapshot snapshots =
+        await firebaseReference(FirebaseRef.product).get();
 
     allProduct = snapshots.docs
         .map((document) => Product.fromDocumant(document))
         .toList();
 
     notifyListeners();
+  }
+
+  Product findProductById(String id) {
+    try {
+      return allProduct.firstWhere((p) => p.id == id);
+    } catch (e) {
+      return null;
+    }
   }
 }

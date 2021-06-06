@@ -133,7 +133,7 @@ class Shop2 extends StatelessWidget {
           create: (context) => ProductManager(),
           lazy: false,
         ),
-        Provider<HomeManager>(
+        ChangeNotifierProvider<HomeManager>(
           create: (context) => HomeManager(),
           lazy: false,
         ),

@@ -1,20 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/another_shop/Common/custom_drawer.dart';
+import 'package:shoppy/another_shop/provider/page_manager.dart';
 import 'package:shoppy/another_shop/screens/home_screen.dart';
 import 'package:shoppy/another_shop/screens/products_screen.dart';
-
-class PageManager {
-  PageManager(this._pageController);
-  final PageController _pageController;
-  int page = 0;
-
-  void setPage(int value) {
-    if (value == page) return;
-    page = value;
-    _pageController.jumpToPage(value);
-  }
-}
+import 'package:shoppy/provider/userState.dart';
 
 class BaseScreen extends StatelessWidget {
   BaseScreen({Key key}) : super(key: key);
@@ -42,6 +32,20 @@ class BaseScreen extends StatelessWidget {
             ),
             drawer: CustomDrawer(),
           ),
+          if (adminEnable) ...[
+            Scaffold(
+              appBar: AppBar(
+                title: Text('Setting'),
+              ),
+              drawer: CustomDrawer(),
+            ),
+            Scaffold(
+              appBar: AppBar(
+                title: Text('Setting2'),
+              ),
+              drawer: CustomDrawer(),
+            ),
+          ]
         ],
       ),
     );

@@ -13,6 +13,8 @@ class FBUser {
   String email;
   String imageUrl;
 
+  bool admin = false;
+
   FBUser.fromDocument(DocumentSnapshot document) {
     uid = document.id;
     name = document[UserKey.name];
