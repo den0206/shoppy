@@ -17,10 +17,11 @@ class UserState with ChangeNotifier {
 
       final docAdmin =
           await firebaseReference(FirebaseRef.admin).doc(currentUser.uid).get();
+      currentUser.admin = true;
 
-      if (docAdmin.exists) {
-        currentUser.admin = true;
-      }
+      // if (docAdmin.exists) {
+      //   currentUser.admin = true;
+      // }
 
       notifyListeners();
     } else {

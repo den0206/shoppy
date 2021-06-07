@@ -55,17 +55,17 @@ String validProductName(String value) {
   }
 }
 
+String validProductDescription(String value) {
+  if (value.length < 6) {
+    return "minimum 6";
+  }
+
+  return null;
+}
+
 String validProductPrice(String value) {
   if (value.isEmpty) {
     return "Pelase enter a Price";
-  } else {
-    return null;
-  }
-}
-
-String validProductDescription(String value) {
-  if (value.isEmpty) {
-    return "Pelase enter a Description";
   } else {
     return null;
   }

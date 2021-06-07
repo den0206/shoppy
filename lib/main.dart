@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
+import 'package:shoppy/another_shop/provider/admin_user_manager.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
+import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/provider/userState.dart';
@@ -129,6 +132,9 @@ class Shop2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<UserState>(
+          create: (context) => UserState()..setUser(),
+        ),
         ChangeNotifierProvider<ProductManager>(
           create: (context) => ProductManager(),
           lazy: false,
@@ -142,6 +148,12 @@ class Shop2 extends StatelessWidget {
           update: (_, userManager, cartManager) =>
               cartManager..updateUser(userManager),
         ),
+        ChangeNotifierProxyProvider<UserState, AdminUserManager>(
+          create: (context) => AdminUserManager(),
+          lazy: false,
+          update: (context, userState, adminUserManager) =>
+              adminUserManager..updateUsers(userState),
+        )
       ],
       child: MaterialApp(
         title: "Shop2",
@@ -156,7 +168,23 @@ class Shop2 extends StatelessWidget {
           ProductScreen.routeName: (context) => ProductScreen(),
           CartScreen.routeName: (context) => CartScreen(),
         },
-        home: BaseScreen(),
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case EditProductScreen.routeName:
+              return MaterialPageRoute(
+                builder: (context) => EditProductScreen(
+                  product: settings.name as Product,
+                ),
+              );
+            default:
+              return MaterialPageRoute(
+                  builder: (_) => BaseScreen(), settings: settings);
+          }
+        },
+        home: EditProductScreen(
+          product: sampleProducts[0],
+        ),
+        // home: BaseScreen(),
       ),
     );
   }

@@ -1,4 +1,10 @@
 class ItemSize {
+  ItemSize({
+    this.title,
+    this.price,
+    this.stock,
+  });
+
   ItemSize.fromMap(Map<String, dynamic> map) {
     title = map[ItemSizeKey.title] as String;
     price = map[ItemSizeKey.price] as num;

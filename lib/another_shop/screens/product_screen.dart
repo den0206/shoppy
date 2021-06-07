@@ -3,7 +3,9 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/another_shop/screens/components/size_widgets.dart';
+import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/userState.dart';
 
 class ProductScreen extends StatelessWidget {
   const ProductScreen({Key key, this.product}) : super(key: key);
@@ -21,6 +23,17 @@ class ProductScreen extends StatelessWidget {
             product.title,
           ),
           centerTitle: true,
+          actions: [
+            if (adminEnable)
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context).pushReplacementNamed(
+                      EditProductScreen.routeName,
+                      arguments: product);
+                },
+              )
+          ],
         ),
         backgroundColor: Colors.white,
         body: ListView(
