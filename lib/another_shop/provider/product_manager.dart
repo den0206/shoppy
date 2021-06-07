@@ -32,6 +32,12 @@ class ProductManager with ChangeNotifier {
     _loadAllProduct();
   }
 
+  void updateProducts(Product product) {
+    allProduct.removeWhere((p) => p.id == product.id);
+    allProduct.add(product);
+    notifyListeners();
+  }
+
   Future<void> _loadAllProduct() async {
     final QuerySnapshot snapshots =
         await firebaseReference(FirebaseRef.product).get();

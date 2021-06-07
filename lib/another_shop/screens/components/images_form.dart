@@ -23,9 +23,9 @@ class ImagesForm extends StatelessWidget {
         }
         return null;
       },
+      onSaved: (images) => product.newImages = images,
       builder: (state) {
         void onSelectedImage(File file) {
-          print("Call");
           state.value.add(file);
           state.didChange(state.value);
           Navigator.of(context).pop();

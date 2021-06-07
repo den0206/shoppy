@@ -28,9 +28,17 @@ class ProductScreen extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
-                  Navigator.of(context).pushReplacementNamed(
-                      EditProductScreen.routeName,
-                      arguments: product);
+                  // Navigator.of(context).pushReplacementNamed(
+                  //     EditProductScreen.routeName,
+                  //     arguments: product);
+
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) {
+                      return EditProductScreen(
+                        product: product,
+                      );
+                    },
+                  ));
                 },
               )
           ],

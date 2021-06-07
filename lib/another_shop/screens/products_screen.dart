@@ -4,8 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:shoppy/another_shop/common/custom_drawer.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
 import 'package:shoppy/model/product.dart';
+import 'package:shoppy/provider/userState.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key key}) : super(key: key);
@@ -51,36 +53,49 @@ class ProductsScreen extends StatelessWidget {
         ),
         centerTitle: true,
         actions: [
-          Consumer<ProductManager>(builder: (context, model, child) {
-            if (model.searchText.isEmpty) {
-              return IconButton(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
-                ),
-                onPressed: () async {
-                  final searchText = await showDialog<String>(
-                    context: context,
-                    builder: (context) =>
-                        SearchDialog(initialtext: model.searchText),
-                  );
+          Consumer<ProductManager>(
+            builder: (context, model, child) {
+              if (model.searchText.isEmpty) {
+                return IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  onPressed: () async {
+                    final searchText = await showDialog<String>(
+                      context: context,
+                      builder: (context) =>
+                          SearchDialog(initialtext: model.searchText),
+                    );
 
-                  /// get dialog String
-                  if (searchText != null) {
-                    print(searchText);
-                    model.searchText = searchText;
-                  }
-                },
-              );
-            } else {
-              return IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () async {
-                  model.searchText = "";
-                },
-              );
-            }
-          })
+                    /// get dialog String
+                    if (searchText != null) {
+                      print(searchText);
+                      model.searchText = searchText;
+                    }
+                  },
+                );
+              } else {
+                return IconButton(
+                  icon: Icon(Icons.close),
+                  onPressed: () async {
+                    model.searchText = "";
+                  },
+                );
+              }
+            },
+          ),
+          if (adminEnable)
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) {
+                    return EditProductScreen();
+                  },
+                ));
+              },
+            )
         ],
       ),
       drawer: CustomDrawer(),

@@ -1,117 +1,131 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/another_shop/model/item_size.dart';
+import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/components/images_form.dart';
 import 'package:shoppy/model/product.dart';
 
 class EditProductScreen extends StatelessWidget {
-  EditProductScreen({Key key, this.product}) : super(key: key);
+  EditProductScreen({Product product})
+      : editing = product != null,
+        product = product != null ? product.clone() : Product();
 
   static const routeName = '/EdeitProductScreen';
   final _formKey = GlobalKey<FormState>(debugLabel: '_EditProductState');
+
   final Product product;
+  final bool editing;
 
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
-    product.images = [];
-    product.sizes = [
-      ItemSize(
-        title: "S",
-        price: 100,
-        stock: 3,
-      ),
-      ItemSize(
-        title: "M",
-        price: 200,
-        stock: 3,
-      ),
-    ];
+    print("EDITING IS$editing");
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit Product'),
-      ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
-            ImagesForm(
-              product: product,
-            ),
-            Padding(
-              padding: EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  TextFormField(
-                    initialValue: product.title,
-                    decoration: InputDecoration(
-                      hintText: "Title",
-                      border: InputBorder.none,
-                    ),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    validator: validProductName,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 4),
-                    child: Text(
-                      "Price",
+    final primaryColor = Theme.of(context).primaryColor;
+
+    return ChangeNotifierProvider.value(
+      value: product,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(editing ? 'Edit Product' : "New Product"),
+        ),
+        body: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              ImagesForm(
+                product: product,
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    TextFormField(
+                      initialValue: product.title,
+                      decoration: InputDecoration(
+                        hintText: "Title",
+                        border: InputBorder.none,
+                      ),
                       style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 13,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      validator: validProductName,
+                      onSaved: (title) => product.title = title,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        "Price",
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    'R\$ ...',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: primaryColor,
+                    Text(
+                      'R\$ ...',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text(
-                      "Description",
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text(
+                        "Description",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    TextFormField(
+                      initialValue: product.description,
+                      maxLines: null,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
                       ),
+                      decoration: InputDecoration(
+                        hintText: "Description",
+                        border: InputBorder.none,
+                      ),
+                      validator: validProductDescription,
+                      onSaved: (desc) => product.description = desc,
                     ),
-                  ),
-                  TextFormField(
-                    initialValue: product.description,
-                    maxLines: null,
-                    style: TextStyle(
-                      fontSize: 16,
+                    SizeForm(
+                      product: product,
                     ),
-                    decoration: InputDecoration(
-                      hintText: "Description",
-                      border: InputBorder.none,
-                    ),
-                    validator: validProductDescription,
-                  ),
-                  SizeForm(
-                    product: product,
-                  ),
-                  CustomButton(
-                    title: "Save",
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        print("Save");
-                      }
-                    },
-                  ),
-                ],
+                    Consumer<Product>(builder: (_, product, __) {
+                      return CustomButton(
+                        title: "Save",
+                        isLoading: product.loading,
+                        onPressed: () async {
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+
+                            // print(product.newImages);
+                            // print("Save");
+
+                            await product.uploadToFireStore();
+
+                            context
+                                .read<ProductManager>()
+                                .updateProducts(product);
+
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      );
+                    }),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -126,7 +140,7 @@ class SizeForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FormField<List<ItemSize>>(
-      initialValue: List.from(product.sizes),
+      initialValue: product.sizes,
       builder: (state) {
         return Column(
           children: [

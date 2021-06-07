@@ -181,10 +181,10 @@ class Shop2 extends StatelessWidget {
                   builder: (_) => BaseScreen(), settings: settings);
           }
         },
-        home: EditProductScreen(
-          product: sampleProducts[0],
-        ),
-        // home: BaseScreen(),
+        // home: EditProductScreen(
+        //   product: sampleProducts[0],
+        // ),
+        home: BaseScreen(),
       ),
     );
   }
