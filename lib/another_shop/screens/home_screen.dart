@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/another_shop/common/custom_drawer.dart';
 import 'package:shoppy/another_shop/model/section.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
@@ -48,12 +49,6 @@ class HomeScreen extends StatelessWidget {
                   )
                 ],
               ),
-              // SliverToBoxAdapter(
-              //   child: Container(
-              //     height: 200,
-              //     width: 200,
-              //   ),
-              // ),
               Consumer<HomeManager>(
                 builder: (_, model, __) {
                   final List<Widget> children = model.sections.map((section) {
@@ -66,6 +61,15 @@ class HomeScreen extends StatelessWidget {
                         return Container();
                     }
                   }).toList();
+                  // ..add(
+                  //   CustomButton(
+                  //     title: "Upload",
+                  //     isLoading: model.isLoading,
+                  //     onPressed: () async {
+                  //       await model.updateSampe();
+                  //     },
+                  //   ),
+                  // );
 
                   return SliverList(
                       delegate: SliverChildListDelegate(children));

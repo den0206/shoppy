@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/consts/sample_products.dart';
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
 import 'package:shoppy/model/product.dart';

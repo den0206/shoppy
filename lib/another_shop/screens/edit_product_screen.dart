@@ -110,7 +110,7 @@ class EditProductScreen extends StatelessWidget {
                             // print(product.newImages);
                             // print("Save");
 
-                            await product.uploadToFireStore();
+                            await product.uploadToFireStore(editing: editing);
 
                             context
                                 .read<ProductManager>()

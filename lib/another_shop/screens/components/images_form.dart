@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,9 +47,12 @@ class ImagesForm extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       if (image is String)
-                        Image.network(
-                          image,
-                          fit: BoxFit.cover,
+                        CachedNetworkImage(
+                          imageUrl: image,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              new Icon(Icons.error),
                         )
                       else
                         Image.file(

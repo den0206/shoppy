@@ -111,10 +111,10 @@ class ProductsScreen extends StatelessWidget {
         builder: (context, model, child) {
           return ListView.builder(
             padding: EdgeInsets.all(4),
-            itemCount: sampleProducts.length,
+            itemCount: model.allProduct.length,
             // itemCount: model.filterdProducts.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProductListTile(product: sampleProducts[index]);
+              return ProductListTile(product: model.allProduct[index]);
             },
           );
         },
@@ -152,7 +152,7 @@ class ProductListTile extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: 1,
-                child: CachedNetworkImage(imageUrl: product.imageUrl),
+                child: CachedNetworkImage(imageUrl: product.images[0]),
               ),
               SizedBox(
                 width: 16,
