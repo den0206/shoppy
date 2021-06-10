@@ -12,6 +12,7 @@ import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
 import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
+import 'package:shoppy/another_shop/screens/select_product.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
@@ -175,6 +176,10 @@ class Shop2 extends StatelessWidget {
                 builder: (context) => EditProductScreen(
                   product: settings.name as Product,
                 ),
+              );
+            case SelectProductScreen.routeName:
+              return MaterialPageRoute(
+                builder: (_) => SelectProductScreen(),
               );
             default:
               return MaterialPageRoute(

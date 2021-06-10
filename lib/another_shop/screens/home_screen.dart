@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +6,8 @@ import 'package:shoppy/another_shop/common/custom_drawer.dart';
 import 'package:shoppy/another_shop/model/section.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/components/item_title.dart';
+import 'package:shoppy/provider/userState.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key key}) : super(key: key);
@@ -46,6 +47,37 @@ class HomeScreen extends StatelessWidget {
                     color: Colors.white,
                     onPressed: () =>
                         Navigator.of(context).pushNamed(CartScreen.routeName),
+                  ),
+                  Consumer<HomeManager>(
+                    builder: (context, model, child) {
+                      if (adminEnable) {
+                        if (model.editing) {
+                          return PopupMenuButton(
+                            onSelected: (e) {
+                              if (e == "Save") {
+                                model.saveEditing();
+                              } else {
+                                model.discardEditing();
+                              }
+                            },
+                            itemBuilder: (context) {
+                              return ["Save", "Discard"].map((e) {
+                                return PopupMenuItem(
+                                  value: e,
+                                  child: Text(e),
+                                );
+                              }).toList();
+                            },
+                          );
+                        } else {
+                          return IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: model.enterEditing,
+                          );
+                        }
+                      } else
+                        return Container();
+                    },
                   )
                 ],
               ),
@@ -71,6 +103,13 @@ class HomeScreen extends StatelessWidget {
                   //   ),
                   // );
 
+                  if (model.editing)
+                    children.add(
+                      AddSectionWidget(
+                        homeManager: model,
+                      ),
+                    );
+
                   return SliverList(
                       delegate: SliverChildListDelegate(children));
                 },
@@ -93,53 +132,36 @@ class SectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(section: section),
-          SizedBox(
-            height: 150,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) => SizedBox(width: 4),
-              itemCount: section.items.length,
-              itemBuilder: (context, index) {
-                return AspectRatio(
-                  aspectRatio: 1,
-                  child: CachedNetworkImage(
-                    imageUrl: section.items[index].image,
-                    fit: BoxFit.cover,
-                  ),
+    final homeManager = context.watch<HomeManager>();
+
+    return ChangeNotifierProvider.value(
+      value: section,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(),
+            SizedBox(
+              height: 150,
+              child: Consumer<Section>(builder: (_, model, __) {
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => SizedBox(width: 4),
+                  itemCount: homeManager.editing
+                      ? section.items.length + 1
+                      : section.items.length,
+                  itemBuilder: (context, index) {
+                    if (index < section.items.length) {
+                      return ItemTile(item: section.items[index]);
+                    } else {
+                      return AddTileWidget();
+                    }
+                  },
                 );
-              },
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class SectionHeader extends StatelessWidget {
-  const SectionHeader({
-    Key key,
-    @required this.section,
-  }) : super(key: key);
-
-  final Section section;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      child: Text(
-        section.name,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w800,
-          fontSize: 18,
+              }),
+            )
+          ],
         ),
       ),
     );
@@ -156,30 +178,131 @@ class StaggeredSectionList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SectionHeader(section: section),
-          StaggeredGridView.countBuilder(
-            padding: EdgeInsets.zero,
-            crossAxisCount: 4,
-            shrinkWrap: true,
-            itemCount: section.items.length,
-            mainAxisSpacing: 4,
-            crossAxisSpacing: 4,
-            itemBuilder: (context, index) {
-              return CachedNetworkImage(
-                imageUrl: section.items[index].image,
-                fit: BoxFit.cover,
+    final homeManager = context.watch<HomeManager>();
+
+    return ChangeNotifierProvider.value(
+      value: section,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionHeader(),
+            Consumer<Section>(builder: (_, model, __) {
+              return StaggeredGridView.countBuilder(
+                padding: EdgeInsets.zero,
+                crossAxisCount: 4,
+                shrinkWrap: true,
+                mainAxisSpacing: 4,
+                crossAxisSpacing: 4,
+                itemCount: homeManager.editing
+                    ? section.items.length + 1
+                    : section.items.length,
+                itemBuilder: (context, index) {
+                  if (index < section.items.length) {
+                    return ItemTile(item: section.items[index]);
+                  } else {
+                    return AddTileWidget();
+                  }
+                },
+                staggeredTileBuilder: (index) =>
+                    StaggeredTile.count(2, index.isEven ? 2 : 1),
               );
-            },
-            staggeredTileBuilder: (index) =>
-                StaggeredTile.count(2, index.isEven ? 2 : 1),
-          )
-        ],
+            })
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class SectionHeader extends StatelessWidget {
+  const SectionHeader({
+    Key key,
+  }) : super(key: key);
+
+  // final Section section;
+
+  @override
+  Widget build(BuildContext context) {
+    final model = context.watch<HomeManager>();
+    final section = context.watch<Section>();
+
+    if (model.editing) {
+      return Row(
+        children: [
+          Expanded(
+            child: TextFormField(
+              initialValue: section.name,
+              decoration: InputDecoration(
+                  hintText: "Title", isDense: true, border: InputBorder.none),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 18),
+              onChanged: (text) => section.name = text,
+            ),
+          ),
+          CircleiconButton(
+            iconData: Icons.remove,
+            color: Colors.white,
+            onTap: () {
+              model.removeSection(section);
+            },
+          ),
+        ],
+      );
+    } else {
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 8),
+        child: Text(
+          section.name ?? "Name",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }
+  }
+}
+
+class AddSectionWidget extends StatelessWidget {
+  const AddSectionWidget({
+    Key key,
+    this.homeManager,
+  }) : super(key: key);
+
+  final HomeManager homeManager;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextButton(
+            child: Text(
+              "Section List",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              homeManager.addSection(Section(type: "List"));
+            },
+          ),
+        ),
+        Expanded(
+          child: TextButton(
+            child: Text(
+              "Section Staggred",
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              homeManager.addSection(Section(type: "Staggered"));
+            },
+          ),
+        ),
+      ],
     );
   }
 }
