@@ -7,6 +7,8 @@ import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/components/images_form.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
+import 'package:shoppy/another_shop/screens/select_product.dart';
+import 'package:shoppy/model/product.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +80,12 @@ class ItemTile extends StatelessWidget {
                         onPressed: () async {
                           if (product != null) {
                             item.productId = null;
-                          } else {}
+                          } else {
+                            final Product product = await Navigator.of(context)
+                                    .pushNamed(SelectProductScreen.routeName)
+                                as Product;
+                            item.productId = product.id;
+                          }
                         },
                       )
                     ],

@@ -6,7 +6,6 @@ import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
 import 'package:shoppy/consts/sample_products.dart';
-import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
 import 'package:shoppy/provider/wishlist_provider.dart';

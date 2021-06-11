@@ -8,11 +8,13 @@ import 'package:shoppy/another_shop/provider/admin_user_manager.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
+import 'package:shoppy/another_shop/screens/address_screen.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
 import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
 import 'package:shoppy/another_shop/screens/select_product.dart';
+import 'package:shoppy/consts/service/adress_number_searvice.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
@@ -35,6 +37,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   // runApp(MyApp());
+
   runApp(Shop2());
 }
 
@@ -180,6 +183,10 @@ class Shop2 extends StatelessWidget {
             case SelectProductScreen.routeName:
               return MaterialPageRoute(
                 builder: (_) => SelectProductScreen(),
+              );
+            case AddressScreen.routeName:
+              return MaterialPageRoute(
+                builder: (_) => AddressScreen(),
               );
             default:
               return MaterialPageRoute(

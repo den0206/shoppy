@@ -6,14 +6,12 @@ import 'package:shoppy/consts/sample_products.dart';
 import 'package:shoppy/model/product.dart';
 
 class HomeManager with ChangeNotifier {
-  List<Section> _sections = [];
+  final List<Section> _sections = [];
   List<Section> _editingSections = [];
 
   bool editing = false;
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
+  bool isLoading = false;
   HomeManager() {
     _loadSections();
   }
@@ -55,7 +53,30 @@ class HomeManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void saveEditing() {
+  Future<void> saveEditing() async {
+    bool valid = true;
+    for (final section in _editingSections) {
+      if (!section.valid()) valid = false;
+    }
+
+    if (!valid) return;
+
+    isLoading = true;
+    notifyListeners();
+
+    int pos = 0;
+    for (final section in _editingSections) {
+      await section.save(pos);
+      pos++;
+    }
+
+    for (final section in _sections) {
+      if (!_editingSections.any((element) => element.id == section.id)) {
+        await section.delete();
+      }
+    }
+
+    isLoading = false;
     editing = false;
     notifyListeners();
   }
@@ -66,7 +87,7 @@ class HomeManager with ChangeNotifier {
   }
 
   Future<void> updateSampe() async {
-    _isLoading = true;
+    isLoading = true;
     notifyListeners();
 
     for (int i = 10; i < 20; i++) {
@@ -77,7 +98,7 @@ class HomeManager with ChangeNotifier {
 
     print("Finish");
 
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
   }
 }

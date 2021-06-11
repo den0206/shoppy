@@ -1,6 +1,6 @@
 import 'package:firebase_storage/firebase_storage.dart';
 
-enum StorageRef { userImage, productImage }
+enum StorageRef { userImage, productImage, home }
 
 extension StorageRefExtension on StorageRef {
   String get path {
@@ -9,6 +9,8 @@ extension StorageRefExtension on StorageRef {
         return "UserImage";
       case StorageRef.productImage:
         return "ProductImage";
+      case StorageRef.home:
+        return "HomeImage";
       default:
         return "";
     }

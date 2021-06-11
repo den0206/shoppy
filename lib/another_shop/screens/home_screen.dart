@@ -50,7 +50,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   Consumer<HomeManager>(
                     builder: (context, model, child) {
-                      if (adminEnable) {
+                      if (adminEnable && !model.isLoading) {
                         if (model.editing) {
                           return PopupMenuButton(
                             onSelected: (e) {
@@ -83,6 +83,14 @@ class HomeScreen extends StatelessWidget {
               ),
               Consumer<HomeManager>(
                 builder: (_, model, __) {
+                  if (model.isLoading) {
+                    return SliverToBoxAdapter(
+                      child: LinearProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(Colors.white),
+                        backgroundColor: Colors.transparent,
+                      ),
+                    );
+                  }
                   final List<Widget> children = model.sections.map((section) {
                     switch (section.type) {
                       case "List":
@@ -195,6 +203,7 @@ class StaggeredSectionList extends StatelessWidget {
                 shrinkWrap: true,
                 mainAxisSpacing: 4,
                 crossAxisSpacing: 4,
+                physics: NeverScrollableScrollPhysics(),
                 itemCount: homeManager.editing
                     ? section.items.length + 1
                     : section.items.length,
@@ -229,27 +238,44 @@ class SectionHeader extends StatelessWidget {
     final section = context.watch<Section>();
 
     if (model.editing) {
-      return Row(
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: TextFormField(
-              initialValue: section.name,
-              decoration: InputDecoration(
-                  hintText: "Title", isDense: true, border: InputBorder.none),
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 18),
-              onChanged: (text) => section.name = text,
-            ),
+          Row(
+            children: [
+              Expanded(
+                child: TextFormField(
+                  initialValue: section.name,
+                  decoration: InputDecoration(
+                      hintText: "Title",
+                      isDense: true,
+                      border: InputBorder.none),
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 18),
+                  onChanged: (text) => section.name = text,
+                ),
+              ),
+              CircleiconButton(
+                iconData: Icons.remove,
+                color: Colors.white,
+                onTap: () {
+                  model.removeSection(section);
+                },
+              ),
+            ],
           ),
-          CircleiconButton(
-            iconData: Icons.remove,
-            color: Colors.white,
-            onTap: () {
-              model.removeSection(section);
-            },
-          ),
+          if (section.error != null)
+            Padding(
+              padding: EdgeInsets.only(bottom: 8),
+              child: Text(
+                section.error,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            )
         ],
       );
     } else {
