@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
+import 'package:shoppy/another_shop/common/login_card.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
+import 'package:shoppy/another_shop/screens/empty_card.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key key}) : super(key: key);
@@ -15,7 +17,16 @@ class CartScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: Consumer<CartManager>(
-        builder: (context, model, child) {
+        builder: (_, model, __) {
+          if (model.user == null) {
+            return LoginCard();
+          }
+          if (model.items.isEmpty) {
+            return EmptyCard(
+              iconData: Icons.remove_shopping_cart,
+              title: "Empty Cart!",
+            );
+          }
           return ListView(
             children: [
               Column(
@@ -141,6 +152,8 @@ class PriceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartManager = context.watch<CartManager>();
     final productPrice = cartManager.productsPrice.toStringAsFixed(2);
+    final deliveryPrice = cartManager.deliverPrice;
+    final totalPrice = cartManager.totalPrice;
 
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -168,6 +181,15 @@ class PriceCard extends StatelessWidget {
               ],
             ),
             Divider(),
+            if (deliveryPrice != null) ...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Deliver price"),
+                  Text('R\$ ${deliveryPrice.toStringAsFixed(2)}')
+                ],
+              ),
+            ],
             SizedBox(
               height: 12,
             ),
@@ -181,7 +203,7 @@ class PriceCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "R\$ $productPrice",
+                  "R\$ ${totalPrice.toStringAsFixed(2)}",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 16,

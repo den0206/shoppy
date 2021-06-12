@@ -17,7 +17,7 @@ class AdressNumberService {
         return Future.error("Error Is empty Cer");
       }
 
-      final adress = Address.fromMap(jsonDecode(response.data));
+      final adress = Address.fromJson(jsonDecode(response.data));
 
       print(adress.city);
       return adress;

@@ -79,6 +79,24 @@ String validProductQuantity(String value) {
   }
 }
 
+String validCepAddress(String value) {
+  if (value.isEmpty) {
+    return "Is Empty";
+  } else if (value.length != 8) {
+    return "No 8";
+  } else {
+    return null;
+  }
+}
+
+String validEmpty(String value) {
+  if (value.isEmpty) {
+    return "Is Empty";
+  } else {
+    return null;
+  }
+}
+
 final List<TextInputFormatter> numberFormatter = <TextInputFormatter>[
   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
 ];

@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:shoppy/Extension/firebaseRef.dart';
+import 'package:shoppy/another_shop/model/adress.dart';
 import 'package:shoppy/another_shop/model/item_size.dart';
+import 'package:shoppy/consts/service/adress_number_searvice.dart';
 import 'package:shoppy/model/FBUser.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/userState.dart';
@@ -10,7 +13,20 @@ class CartManager with ChangeNotifier {
   List<CartProduct> items = [];
 
   FBUser user;
+  Address address;
+  bool get isAddressValid => address != null && deliverPrice != null;
+
   num productsPrice = 0;
+  num deliverPrice;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+  set loading(bool value) {
+    _isLoading = value;
+    notifyListeners();
+  }
+
+  num get totalPrice => productsPrice + (deliverPrice ?? 0);
 
   bool get isCartValid {
     for (final cr in items) {
@@ -22,10 +38,13 @@ class CartManager with ChangeNotifier {
 
   void updateUser(UserState userManager) {
     user = currentUser;
+    productsPrice = 0.0;
     items.clear();
+    removeAddress();
 
     if (user != null) {
       _loadCartItems();
+      _loadUserAddress();
     }
   }
 
@@ -87,6 +106,75 @@ class CartManager with ChangeNotifier {
 
   void _uodateCartProduct(CartProduct cr) {
     if (cr.id != null) cartReference(user).doc(cr.id).update(cr.toMap());
+  }
+
+  Future<void> _loadUserAddress() async {
+    if (user.address != null && await caluculateDelivery(0, 0)) {
+      address = user.address;
+      notifyListeners();
+    }
+  }
+
+  Future<void> getAddress(String cep) async {
+    loading = true;
+    final searvice = AdressNumberService();
+    try {
+      final cepAddress = await searvice.getAdDressFromCep(cep);
+
+      if (cepAddress != null) {
+        address = cepAddress;
+        loading = false;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      loading = false;
+      return Future.error("Address Number InValid");
+    }
+  }
+
+  void removeAddress() {
+    address = null;
+    deliverPrice = null;
+    notifyListeners();
+  }
+
+  Future<void> setAddress(Address address) async {
+    loading = true;
+    this.address = address;
+    print(address.city);
+
+    if (await caluculateDelivery(0, 0)) {
+      print("$deliverPrice");
+      user.setAddress(address);
+      loading = false;
+    } else {
+      loading = false;
+      return Future.error("Deliverty price Error");
+    }
+  }
+
+  Future<bool> caluculateDelivery(double lat, double long) async {
+    final DocumentSnapshot doc =
+        await firebaseReference(FirebaseRef.aux).doc("delivery").get();
+    final latStore = doc["lat"] as double;
+    final longStore = doc["long"] as double;
+
+    final base = doc["base"] as num;
+    final km = doc["km"] as num;
+    final maxKm = doc["maxkm"] as num;
+
+    double distance =
+        Geolocator.distanceBetween(latStore, longStore, lat, long);
+
+    distance /= 1000.0;
+    print(distance);
+
+    if (distance > maxKm) {
+      return false;
+    }
+
+    deliverPrice = base + distance * km;
+    return true;
   }
 }
 
