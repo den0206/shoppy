@@ -7,6 +7,7 @@ import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/another_shop/model/adress.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/checkout_screen.dart';
 
 class AddressScreen extends StatelessWidget {
   const AddressScreen({Key key}) : super(key: key);
@@ -29,7 +30,8 @@ class AddressScreen extends StatelessWidget {
                 buttonTitle: "Continue",
                 onTap: model.isAddressValid
                     ? () {
-                        print("Call");
+                        Navigator.of(context)
+                            .pushNamed(CheckoutScreen.routeName);
                       }
                     : null,
               );
@@ -260,8 +262,8 @@ class _AddressField extends StatelessWidget {
       enabled: !cartManager.isLoading,
       decoration: InputDecoration(
         isDense: true,
-        labelText: "capital",
-        hintText: "Tokyo",
+        labelText: labelText,
+        hintText: hintText,
       ),
       validator: validEmpty,
       onSaved: onSaved,
