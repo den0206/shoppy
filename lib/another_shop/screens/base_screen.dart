@@ -9,6 +9,8 @@ import 'package:shoppy/provider/userState.dart';
 
 class BaseScreen extends StatelessWidget {
   BaseScreen({Key key}) : super(key: key);
+  static const routeName = '/BaseScreen';
+
   final PageController pageController = PageController();
 
   @override

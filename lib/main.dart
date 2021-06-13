@@ -7,6 +7,7 @@ import 'package:shoppy/Provider/dark_theme_provider.dart';
 import 'package:shoppy/another_shop/provider/admin_user_manager.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
+import 'package:shoppy/another_shop/provider/order_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
 import 'package:shoppy/another_shop/screens/address_screen.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
@@ -158,6 +159,12 @@ class Shop2 extends StatelessWidget {
           lazy: false,
           update: (context, userState, adminUserManager) =>
               adminUserManager..updateUsers(userState),
+        ),
+        ChangeNotifierProxyProvider<UserState, OrderManager>(
+          create: (context) => OrderManager(),
+          lazy: false,
+          update: (context, userState, orderManager) =>
+              orderManager..updateUser(userState),
         )
       ],
       child: MaterialApp(
@@ -175,6 +182,11 @@ class Shop2 extends StatelessWidget {
         },
         onGenerateRoute: (settings) {
           switch (settings.name) {
+            case BaseScreen.routeName:
+              return MaterialPageRoute(
+                builder: (_) => BaseScreen(),
+                settings: settings,
+              );
             case EditProductScreen.routeName:
               return MaterialPageRoute(
                 builder: (context) => EditProductScreen(
@@ -195,7 +207,9 @@ class Shop2 extends StatelessWidget {
               );
             default:
               return MaterialPageRoute(
-                  builder: (_) => BaseScreen(), settings: settings);
+                builder: (_) => BaseScreen(),
+                settings: settings,
+              );
           }
         },
         // home: EditProductScreen(

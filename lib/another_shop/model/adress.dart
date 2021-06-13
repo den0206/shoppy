@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Address {
   String capital;
   String city;
@@ -14,12 +12,12 @@ class Address {
     street = map["results"][0]["address3"];
   }
 
-  Address.fromDocument(DocumentSnapshot doc) {
-    capital = doc[AddressKey.capital];
-    city = doc[AddressKey.city];
-    street = doc[AddressKey.street];
-    number = doc[AddressKey.number];
-    if (doc[AddressKey.complement]) complement = doc[AddressKey.complement];
+  Address.fromMap(Map<String, dynamic> map) {
+    capital = map[AddressKey.capital];
+    city = map[AddressKey.city];
+    street = map[AddressKey.street];
+    number = map[AddressKey.number];
+    if (map[AddressKey.complement]) complement = map[AddressKey.complement];
   }
 
   Map<String, dynamic> toMap() {

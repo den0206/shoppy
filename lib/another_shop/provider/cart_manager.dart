@@ -84,6 +84,15 @@ class CartManager with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearOfCart() {
+    for (final cartProduct in items) {
+      cartReference(user).doc(cartProduct.id).delete();
+    }
+
+    items.clear();
+    notifyListeners();
+  }
+
   void _onItemUpdated() {
     print('UPDATE');
 
@@ -97,14 +106,14 @@ class CartManager with ChangeNotifier {
         continue;
       }
       productsPrice += cr.totalPrice;
-      _uodateCartProduct(cr);
+      _updateCartProduct(cr);
     }
 
     print(productsPrice);
     notifyListeners();
   }
 
-  void _uodateCartProduct(CartProduct cr) {
+  void _updateCartProduct(CartProduct cr) {
     if (cr.id != null) cartReference(user).doc(cr.id).update(cr.toMap());
   }
 
@@ -179,7 +188,7 @@ class CartManager with ChangeNotifier {
 }
 
 class CartProduct with ChangeNotifier {
-  CartProduct.fromProduct(this.product) {
+  CartProduct.fromProduct(this._product) {
     productId = product.id;
     quantity = 1;
     size = product.selectedSize.title;
@@ -190,6 +199,7 @@ class CartProduct with ChangeNotifier {
     productId = document[CartKey.productionId] as String;
     quantity = document[CartKey.quantity] as int;
     size = document[CartKey.size] as String;
+    fixedPrice = document[CartKey.fixedPrice] as num;
 
     /// Relation
     firebaseReference(FirebaseRef.product)
@@ -197,7 +207,7 @@ class CartProduct with ChangeNotifier {
         .get()
         .then((document) {
       product = Product.fromDocumant(document);
-      notifyListeners();
+      // notifyListeners();
     });
   }
 
@@ -206,7 +216,14 @@ class CartProduct with ChangeNotifier {
   int quantity;
   String size;
 
-  Product product;
+  num fixedPrice;
+
+  Product _product;
+  Product get product => _product;
+  set product(Product value) {
+    _product = value;
+    notifyListeners();
+  }
 
   ItemSize get itemSize {
     if (product == null) return null;
@@ -231,6 +248,7 @@ class CartProduct with ChangeNotifier {
       CartKey.productionId: productId,
       CartKey.quantity: quantity,
       CartKey.size: size,
+      CartKey.fixedPrice: fixedPrice ?? unitPrice,
     };
   }
 
@@ -254,4 +272,5 @@ class CartKey {
   static final productionId = "productionId";
   static final quantity = "quantity";
   static final size = "size";
+  static final fixedPrice = "fixedPrice";
 }

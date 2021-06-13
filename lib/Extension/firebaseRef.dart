@@ -7,8 +7,8 @@ enum FirebaseRef {
   cart,
   home,
   admin,
-
-  aux
+  order,
+  aux,
 }
 
 extension FirebaseRefExtension on FirebaseRef {
@@ -24,6 +24,8 @@ extension FirebaseRefExtension on FirebaseRef {
         return "Home";
       case FirebaseRef.admin:
         return "Admin";
+      case FirebaseRef.cart:
+        return "Cart";
       case FirebaseRef.aux:
         return "Aux";
 
