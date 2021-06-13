@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/checkout_manager.dart';
-import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/confirmation_screen.dart';
 
 class CheckoutScreen extends StatelessWidget {
   CheckoutScreen({Key key}) : super(key: key);
@@ -56,9 +56,12 @@ class CheckoutScreen extends StatelessWidget {
                 onTap: () {
                   model.checkout(onStockFail: (e) {
                     showErrorAlert(context, e);
-                  }, onSuccess: () {
-                    Navigator.of(context).popUntil(
-                        (route) => route.settings.name == BaseScreen.routeName);
+                  }, onSuccess: (order) {
+                    Navigator.of(context).pushNamed(
+                        ConfirmationScreen.routeName,
+                        arguments: order);
+                    // Navigator.of(context).popUntil(
+                    //     (route) => route.settings.name == BaseScreen.routeName);
                   });
                 },
               )

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Provider/dark_theme_provider.dart';
+import 'package:shoppy/another_shop/model/order.dart';
+import 'package:shoppy/another_shop/provider/admin_order_manager.dart';
 import 'package:shoppy/another_shop/provider/admin_user_manager.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
@@ -13,10 +15,10 @@ import 'package:shoppy/another_shop/screens/address_screen.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
 import 'package:shoppy/another_shop/screens/checkout_screen.dart';
+import 'package:shoppy/another_shop/screens/confirmation_screen.dart';
 import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
 import 'package:shoppy/another_shop/screens/select_product.dart';
-import 'package:shoppy/consts/service/adress_number_searvice.dart';
 import 'package:shoppy/model/product.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/provider/products_provider.dart';
@@ -165,6 +167,12 @@ class Shop2 extends StatelessWidget {
           lazy: false,
           update: (context, userState, orderManager) =>
               orderManager..updateUser(userState),
+        ),
+        ChangeNotifierProxyProvider<UserState, AdminOrderManager>(
+          create: (context) => AdminOrderManager(),
+          lazy: false,
+          update: (context, userState, adminOrder) =>
+              adminOrder..updateAdmin(userState),
         )
       ],
       child: MaterialApp(
@@ -204,6 +212,13 @@ class Shop2 extends StatelessWidget {
             case CheckoutScreen.routeName:
               return MaterialPageRoute(
                 builder: (_) => CheckoutScreen(),
+              );
+
+            case ConfirmationScreen.routeName:
+              return MaterialPageRoute(
+                builder: (context) => ConfirmationScreen(
+                  order: settings.arguments as Order,
+                ),
               );
             default:
               return MaterialPageRoute(
