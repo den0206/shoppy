@@ -5,6 +5,7 @@ import 'package:shoppy/another_shop/common/login_card.dart';
 import 'package:shoppy/another_shop/model/order.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/order_manager.dart';
+import 'package:shoppy/another_shop/screens/components/order_tile_dialog.dart';
 import 'package:shoppy/another_shop/screens/empty_card.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
 
@@ -113,7 +114,12 @@ class OrderTile extends StatelessWidget {
                       "Cancel",
                       style: TextStyle(color: Colors.red),
                     ),
-                    onPressed: order.cancel,
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              CancelOrderDialog(order: order));
+                    },
                   ),
                   TextButton(
                     child: Text("Back"),
@@ -125,7 +131,12 @@ class OrderTile extends StatelessWidget {
                   ),
                   TextButton(
                     child: Text("End"),
-                    onPressed: () {},
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) =>
+                              ExportAddressDialog(address: order.address));
+                    },
                   ),
                 ],
               ),

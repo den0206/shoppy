@@ -2,7 +2,9 @@ import 'package:alphabet_list_scroll_view/alphabet_list_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/another_shop/common/custom_drawer.dart';
+import 'package:shoppy/another_shop/provider/admin_order_manager.dart';
 import 'package:shoppy/another_shop/provider/admin_user_manager.dart';
+import 'package:shoppy/another_shop/provider/page_manager.dart';
 
 class AdminUsersScreen extends StatelessWidget {
   const AdminUsersScreen({Key key}) : super(key: key);
@@ -40,6 +42,10 @@ class AdminUsersScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
+                onTap: () {
+                  context.read<AdminOrderManager>().setUserFilter(adminUser);
+                  context.read<PageManager>().setPage(5);
+                },
               );
             },
           );

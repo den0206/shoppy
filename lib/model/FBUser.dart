@@ -25,9 +25,10 @@ class FBUser {
 
     imageUrl = document[UserKey.imageUrl] as String ?? null;
 
-    if (document[UserKey.address])
+    final Map<String, dynamic> map = document.data() as Map<String, dynamic>;
+    if (map.containsKey(UserKey.address))
       address =
-          Address.fromJson(document[UserKey.address] as Map<String, dynamic>);
+          Address.fromMap(document[UserKey.address] as Map<String, dynamic>);
   }
 
   Map<String, dynamic> toMap() {
@@ -53,5 +54,5 @@ class UserKey {
   static final email = "email";
   static final imageUrl = "imageUrl";
 
-  static final address = "addres";
+  static final address = "address";
 }

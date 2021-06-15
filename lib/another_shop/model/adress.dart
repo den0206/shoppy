@@ -17,7 +17,8 @@ class Address {
     city = map[AddressKey.city];
     street = map[AddressKey.street];
     number = map[AddressKey.number];
-    if (map[AddressKey.complement]) complement = map[AddressKey.complement];
+    if (map[AddressKey.complement] != null)
+      complement = map[AddressKey.complement];
   }
 
   Map<String, dynamic> toMap() {

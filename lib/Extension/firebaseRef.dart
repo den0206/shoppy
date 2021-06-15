@@ -26,6 +26,8 @@ extension FirebaseRefExtension on FirebaseRef {
         return "Admin";
       case FirebaseRef.cart:
         return "Cart";
+      case FirebaseRef.order:
+        return "Order";
       case FirebaseRef.aux:
         return "Aux";
 

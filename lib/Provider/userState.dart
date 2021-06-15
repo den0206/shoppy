@@ -14,10 +14,11 @@ class UserState with ChangeNotifier {
       final doc = await firebaseReference(FirebaseRef.user).doc(userId).get();
 
       currentUser = FBUser.fromDocument(doc);
-
+      print(currentUser.name);
       final docAdmin =
           await firebaseReference(FirebaseRef.admin).doc(currentUser.uid).get();
       currentUser.admin = true;
+      print("Admin");
 
       // if (docAdmin.exists) {
       //   currentUser.admin = true;
