@@ -70,7 +70,8 @@ class Section with ChangeNotifier {
     }
 
     for (final original in originalItems) {
-      if (!items.contains(original)) {
+      if (!items.contains(original) &&
+          (original.image as String).contains("firebase")) {
         try {
           final ref = FirebaseStorage.instance.refFromURL(original.image);
           await ref.delete();
@@ -89,10 +90,12 @@ class Section with ChangeNotifier {
   Future<void> delete() async {
     await firebaseReference(FirebaseRef.home).doc(id).delete();
     for (final item in items) {
-      try {
-        final ref = FirebaseStorage.instance.refFromURL(item.image as String);
-        await ref.delete();
-      } catch (e) {}
+      if ((item.image as String).contains("firebase")) {
+        try {
+          final ref = FirebaseStorage.instance.refFromURL(item.image as String);
+          await ref.delete();
+        } catch (e) {}
+      }
     }
   }
 

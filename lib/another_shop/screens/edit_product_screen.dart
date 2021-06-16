@@ -29,6 +29,16 @@ class EditProductScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(editing ? 'Edit Product' : "New Product"),
+          actions: [
+            if (editing)
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  context.read<ProductManager>().delete(product);
+                  Navigator.of(context).pop();
+                },
+              )
+          ],
         ),
         body: Form(
           key: _formKey,

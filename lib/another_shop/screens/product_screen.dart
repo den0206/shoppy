@@ -24,7 +24,7 @@ class ProductScreen extends StatelessWidget {
           ),
           centerTitle: true,
           actions: [
-            if (adminEnable)
+            if (adminEnable && !product.deleted)
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
@@ -107,23 +107,37 @@ class ProductScreen extends StatelessWidget {
                       fontSize: 16,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16),
-                    child: Text(
-                      "Sizes",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                  if (product.deleted)
+                    Padding(
+                      padding: EdgeInsets.only(top: 16, bottom: 8),
+                      child: Text(
+                        "This Product deleted",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.red,
+                        ),
+                      ),
+                    )
+                  else ...[
+                    Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text(
+                        "Sizes",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                  ),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: product.sizes.map((s) {
-                      return SizeWidget(size: s);
-                    }).toList(),
-                  ),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: product.sizes.map((s) {
+                        return SizeWidget(size: s);
+                      }).toList(),
+                    ),
+                  ],
                   SizedBox(
                     height: 20,
                   ),

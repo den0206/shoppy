@@ -110,7 +110,7 @@ class ProductsScreen extends StatelessWidget {
       body: Consumer<ProductManager>(
         builder: (context, model, child) {
           return ListView.builder(
-            padding: EdgeInsets.all(4),
+            // padding: EdgeInsets.all(4),
             itemCount: model.allProduct.length,
             // itemCount: model.filterdProducts.length,
             itemBuilder: (BuildContext context, int index) {
@@ -142,6 +142,7 @@ class ProductListTile extends StatelessWidget {
         ));
       },
       child: Card(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -186,7 +187,18 @@ class ProductListTile extends StatelessWidget {
                       fontWeight: FontWeight.w800,
                       color: Theme.of(context).primaryColor,
                     ),
-                  )
+                  ),
+                  if (!product.hasStock)
+                    Padding(
+                      padding: EdgeInsets.only(top: 4),
+                      child: Text(
+                        "Sold Out",
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 10,
+                        ),
+                      ),
+                    )
                 ],
               ))
             ],

@@ -22,6 +22,7 @@ class Product with ChangeNotifier {
     this.isPopular,
     this.images,
     this.sizes,
+    this.deleted = false,
   }) {
     images = images ?? [];
     sizes = sizes ?? [];
@@ -33,6 +34,7 @@ class Product with ChangeNotifier {
     description = document[ProductKey.description];
     images = List<String>.from(document[ProductKey.images] as List<dynamic>);
 
+    deleted = (document[ProductKey.deleted] ?? false) as bool;
     sizes = (document[ProductKey.sizes] as List<dynamic> ?? [])
         .map((s) => ItemSize.fromMap(s as Map<String, dynamic>))
         .toList();
@@ -48,6 +50,8 @@ class Product with ChangeNotifier {
   int quantity;
   bool isFavorite;
   bool isPopular;
+
+  bool deleted;
 
   List<dynamic> newImages;
   bool _loading = false;
@@ -77,13 +81,13 @@ class Product with ChangeNotifier {
   }
 
   bool get hasStock {
-    return totalStock > 0;
+    return totalStock > 0 && !deleted;
   }
 
   num get basePrice {
     num lowest = double.infinity;
     for (final size in sizes) {
-      if (size.price < lowest && size.hasStock) lowest = size.price;
+      if (size.price < lowest) lowest = size.price;
     }
     return lowest;
   }
@@ -102,6 +106,7 @@ class Product with ChangeNotifier {
       ProductKey.description: description,
       ProductKey.images: [imageUrl],
       ProductKey.sizes: exportSizeList(),
+      ProductKey.deleted: deleted,
     };
   }
 
@@ -155,6 +160,10 @@ class Product with ChangeNotifier {
     notifyListeners();
   }
 
+  void delete() {
+    firebaseReference(FirebaseRef.product).doc(id).delete();
+  }
+
   Future<void> uploadToSample() async {
     loading = true;
     notifyListeners();
@@ -199,6 +208,7 @@ class Product with ChangeNotifier {
       isPopular: isPopular,
       images: List.from(images),
       sizes: sizes.map((size) => size.clone()).toList(),
+      deleted: deleted,
     );
   }
 }
@@ -215,6 +225,7 @@ class ProductKey {
   static final isPopular = "isPopular";
 
   static final sizes = "sizes";
+  static final deleted = "deleted";
 }
 
 // if (id == null) {

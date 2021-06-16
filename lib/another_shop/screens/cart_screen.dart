@@ -4,6 +4,7 @@ import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/another_shop/common/login_card.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/screens/empty_card.dart';
+import 'package:shoppy/another_shop/screens/product_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key key}) : super(key: key);
@@ -54,84 +55,95 @@ class CartTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
       value: cartProduct,
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              SizedBox(
-                height: 80,
-                width: 80,
-                child: Image.network(cartProduct.product.imageUrl),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        cartProduct.product.title,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context) {
+              return ProductScreen(
+                product: cartProduct.product,
+              );
+            },
+          ));
+        },
+        child: Card(
+          margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                SizedBox(
+                  height: 80,
+                  width: 80,
+                  child: Image.network(cartProduct.product.imageUrl),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          cartProduct.product.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 17,
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 8),
-                        child: Text(
-                          "Size : ${cartProduct.size}",
-                          style: TextStyle(fontWeight: FontWeight.w300),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Text(
+                            "Size : ${cartProduct.size}",
+                            style: TextStyle(fontWeight: FontWeight.w300),
+                          ),
                         ),
-                      ),
-                      Consumer<CartProduct>(builder: (_, model, __) {
-                        if (model.hasStock) {
-                          return Text(
-                            'R\$ ${cartProduct.unitPrice.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        } else {
-                          return Text(
-                            "Sold out",
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                            ),
-                          );
-                        }
-                      })
-                    ],
+                        Consumer<CartProduct>(builder: (_, model, __) {
+                          if (model.hasStock) {
+                            return Text(
+                              'R\$ ${cartProduct.unitPrice.toStringAsFixed(2)}',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            );
+                          } else {
+                            return Text(
+                              "Sold out",
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12,
+                              ),
+                            );
+                          }
+                        })
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Consumer<CartProduct>(builder: (_, model, __) {
-                return Column(
-                  children: [
-                    CircleiconButton(
-                      iconData: Icons.add,
-                      color: Theme.of(context).primaryColor,
-                      onTap: model.increment,
-                    ),
-                    Text(
-                      "${cartProduct.quantity}",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    CircleiconButton(
-                      iconData: Icons.remove,
-                      color: model.quantity > 1
-                          ? Theme.of(context).primaryColor
-                          : Colors.red,
-                      onTap: model.decrement,
-                    ),
-                  ],
-                );
-              })
-            ],
+                Consumer<CartProduct>(builder: (_, model, __) {
+                  return Column(
+                    children: [
+                      CircleiconButton(
+                        iconData: Icons.add,
+                        color: Theme.of(context).primaryColor,
+                        onTap: model.increment,
+                      ),
+                      Text(
+                        "${cartProduct.quantity}",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      CircleiconButton(
+                        iconData: Icons.remove,
+                        color: model.quantity > 1
+                            ? Theme.of(context).primaryColor
+                            : Colors.red,
+                        onTap: model.decrement,
+                      ),
+                    ],
+                  );
+                })
+              ],
+            ),
           ),
         ),
       ),

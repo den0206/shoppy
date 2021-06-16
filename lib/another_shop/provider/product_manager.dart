@@ -39,13 +39,20 @@ class ProductManager with ChangeNotifier {
   }
 
   Future<void> _loadAllProduct() async {
-    final QuerySnapshot snapshots =
-        await firebaseReference(FirebaseRef.product).get();
+    final QuerySnapshot snapshots = await firebaseReference(FirebaseRef.product)
+        .where(ProductKey.deleted, isEqualTo: false)
+        .get();
 
     allProduct = snapshots.docs
         .map((document) => Product.fromDocumant(document))
         .toList();
 
+    notifyListeners();
+  }
+
+  void delete(Product product) {
+    product.delete();
+    allProduct.removeWhere((p) => p.id == product.id);
     notifyListeners();
   }
 
