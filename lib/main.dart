@@ -11,6 +11,7 @@ import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/home_manager.dart';
 import 'package:shoppy/another_shop/provider/order_manager.dart';
 import 'package:shoppy/another_shop/provider/product_manager.dart';
+import 'package:shoppy/another_shop/provider/store_manager.dart';
 import 'package:shoppy/another_shop/screens/address_screen.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
@@ -150,6 +151,9 @@ class Shop2 extends StatelessWidget {
         ChangeNotifierProvider<HomeManager>(
           create: (context) => HomeManager(),
           lazy: false,
+        ),
+        ChangeNotifierProvider<StoreManager>(
+          create: (context) => StoreManager(),
         ),
         ChangeNotifierProxyProvider<UserState, CartManager>(
           create: (context) => CartManager(),

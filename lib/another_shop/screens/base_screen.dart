@@ -7,6 +7,7 @@ import 'package:shoppy/another_shop/screens/admin_users_screen.dart';
 import 'package:shoppy/another_shop/screens/home_screen.dart';
 import 'package:shoppy/another_shop/screens/order_screen.dart';
 import 'package:shoppy/another_shop/screens/products_screen.dart';
+import 'package:shoppy/another_shop/screens/store_screen.dart';
 import 'package:shoppy/provider/userState.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -27,12 +28,7 @@ class BaseScreen extends StatelessWidget {
           HomeScreen(),
           ProductsScreen(),
           OrderScreen(),
-          Scaffold(
-            appBar: AppBar(
-              title: Text('Home4'),
-            ),
-            drawer: CustomDrawer(),
-          ),
+          StoreScreen(),
           AdminUsersScreen(),
           AdminOrderScreen(),
         ],
