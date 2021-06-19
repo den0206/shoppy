@@ -128,6 +128,9 @@ String validCVV(String value) {
 final List<TextInputFormatter> numberFormatter = <TextInputFormatter>[
   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
 ];
+final List<TextInputFormatter> decimalFormatter = <TextInputFormatter>[
+  FilteringTextInputFormatter.allow(RegExp(r"^\d*\.?\d*")),
+];
 
 final MaskTextInputFormatter dateFormatter = MaskTextInputFormatter(
     mask: '!#/####', filter: {'#': RegExp('[0-9]'), '!': RegExp('[0-1]')});

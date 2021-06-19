@@ -110,7 +110,7 @@ class Home extends StatelessWidget {
                 width: double.infinity,
                 height: 180,
                 child: ListView.builder(
-                  itemCount: categories.length,
+                  itemCount: categories.length - 1,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
                     final KCategory category = categories[index];

@@ -110,6 +110,18 @@ class Product with ChangeNotifier {
     };
   }
 
+  Map<String, dynamic> toMap1() {
+    return {
+      ProductKey.id: id,
+      ProductKey.title: title,
+      ProductKey.description: description,
+      ProductKey.imageUrl: imageUrl,
+      ProductKey.price: price,
+      ProductKey.category: category.name,
+      ProductKey.brand: brand.name,
+    };
+  }
+
   List<Map<String, dynamic>> exportSizeList() {
     return sizes.map((size) => size.toMap()).toList();
   }
@@ -220,6 +232,7 @@ class ProductKey {
   static final imageUrl = "imageUrl";
   static final images = "images";
   static final price = "price";
+  static final category = "category";
   static final brand = "brand";
   static final quantity = "quantity";
   static final isPopular = "isPopular";

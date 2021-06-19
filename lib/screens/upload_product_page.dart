@@ -7,9 +7,14 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/CostomWidgets.dart';
 import 'package:shoppy/Extension/ImagePickerFunction.dart';
+import 'package:shoppy/Extension/StoregeFunction.dart';
+import 'package:shoppy/Extension/firebaseRef.dart';
+import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/Extension/validator.dart';
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
+import 'package:shoppy/model/product.dart';
+import 'package:uuid/uuid.dart';
 
 class UploadProductModel with ChangeNotifier {
   TextEditingController titleController = TextEditingController();
@@ -56,6 +61,44 @@ class UploadProductModel with ChangeNotifier {
     productImage = null;
     notifyListeners();
   }
+
+  void submitProduct({
+    @required void Function() onSuccess,
+    @required void Function(Exception e) errorCallback,
+  }) async {
+    if (productImage == null) {
+      Exception noImgeError = Exception("No Production Image");
+      errorCallback(noImgeError);
+      return;
+    }
+    try {
+      final productId = Uuid().v4();
+      final imageUrl = await uploadStorage(
+          StorageRef.productImage, "$productId + jpg", productImage);
+
+      final Product product = Product(
+        id: productId,
+        title: title,
+        description: description,
+        price: double.parse(priceController.text),
+        imageUrl: imageUrl,
+        category: selectCategoey ?? KCategory.all,
+        brand: selectBrand ?? Brand.all,
+      );
+
+      await firebaseReference(FirebaseRef.product)
+          .doc(product.id)
+          .set(product.toMap1());
+
+      onSuccess();
+
+      // continue;
+    } catch (e) {
+      errorCallback(e);
+    } finally {
+      print("Finish");
+    }
+  }
 }
 
 class UploadProductPage extends StatelessWidget {
@@ -67,7 +110,7 @@ class UploadProductPage extends StatelessWidget {
     return ChangeNotifierProvider<UploadProductModel>(
         create: (context) => UploadProductModel(),
         builder: (context, snapshot) {
-          return Consumer<UploadProductModel>(builder: (context, model, child) {
+          return Consumer<UploadProductModel>(builder: (_, model, __) {
             return Scaffold(
               bottomNavigationBar: Container(
                 height: MediaQuery.of(context).size.height / 10,
@@ -84,7 +127,17 @@ class UploadProductPage extends StatelessWidget {
                     onTap: () {
                       if (_formKey.currentState.validate()) {
                         FocusScope.of(context).unfocus();
-                        print(model.price);
+
+                        model.submitProduct(
+                          onSuccess: () {
+                            Navigator.canPop(context)
+                                ? Navigator.pop(context)
+                                : null;
+                          },
+                          errorCallback: (Exception e) {
+                            showErrorAlert(context, e);
+                          },
+                        );
                       }
                     },
                     splashColor: Colors.grey,
@@ -158,8 +211,10 @@ class UploadProductPage extends StatelessWidget {
                                       controller: model.priceController,
                                       labelText: "Price \$",
                                       validator: validProductPrice,
-                                      inputType: TextInputType.number,
-                                      inputFormatter: numberFormatter,
+                                      inputType:
+                                          TextInputType.numberWithOptions(
+                                              decimal: true),
+                                      inputFormatter: decimalFormatter,
                                     ),
                                   ),
                                 ],
