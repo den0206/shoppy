@@ -1,10 +1,15 @@
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:shoppy/Extension/validator.dart';
+import 'package:shoppy/another_shop/model/credit_card.dart';
 
 class CreditCardWidget extends StatelessWidget {
-  CreditCardWidget({Key key}) : super(key: key);
+  CreditCardWidget({
+    Key key,
+    this.creditCard,
+  }) : super(key: key);
 
   final GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
   final FocusNode numberFocus = FocusNode();
@@ -12,38 +17,69 @@ class CreditCardWidget extends StatelessWidget {
   final FocusNode nameFocus = FocusNode();
   final FocusNode cvvFocus = FocusNode();
 
+  final CreditCard creditCard;
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FlipCard(
-            key: cardKey,
-            direction: FlipDirection.HORIZONTAL,
-            speed: 700,
-            flipOnTouch: false,
-            front: CardFront(
-              numberFocus: numberFocus,
-              dateFocus: dateFocus,
-              nameFocus: nameFocus,
-              finished: () {
-                cardKey.currentState.toggleCard();
-                cvvFocus.requestFocus();
-              },
-            ),
-            back: CardBack(
-              cvvFocus: cvvFocus,
-            ),
-          ),
-          TextButton(
-            child: Text("Flip Card"),
-            onPressed: () {
-              cardKey.currentState.toggleCard();
-            },
-          )
+    KeyboardActionsConfig _buildConfig() {
+      return KeyboardActionsConfig(
+        actions: [
+          KeyboardActionsItem(focusNode: numberFocus, displayDoneButton: false),
+          KeyboardActionsItem(focusNode: dateFocus, displayDoneButton: false),
+          KeyboardActionsItem(focusNode: nameFocus, toolbarButtons: [
+            (_) {
+              return GestureDetector(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Text("Continue"),
+                ),
+                onTap: () {
+                  cardKey.currentState.toggleCard();
+                  cvvFocus.requestFocus();
+                },
+              );
+            }
+          ]),
         ],
+      );
+    }
+
+    return KeyboardActions(
+      config: _buildConfig(),
+      autoScroll: false,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            FlipCard(
+              key: cardKey,
+              direction: FlipDirection.HORIZONTAL,
+              speed: 700,
+              flipOnTouch: false,
+              front: CardFront(
+                creditCard: creditCard,
+                numberFocus: numberFocus,
+                dateFocus: dateFocus,
+                nameFocus: nameFocus,
+                finished: () {
+                  cardKey.currentState.toggleCard();
+                  cvvFocus.requestFocus();
+                },
+              ),
+              back: CardBack(
+                creditCard: creditCard,
+                cvvFocus: cvvFocus,
+              ),
+            ),
+            TextButton(
+              child: Text("Flip Card"),
+              onPressed: () {
+                cardKey.currentState.toggleCard();
+              },
+            )
+          ],
+        ),
       ),
     );
   }
@@ -52,14 +88,16 @@ class CreditCardWidget extends StatelessWidget {
 class CardFront extends StatelessWidget {
   const CardFront({
     Key key,
+    this.creditCard,
     this.finished,
     this.numberFocus,
     this.dateFocus,
     this.nameFocus,
   }) : super(key: key);
 
-  final VoidCallback finished;
+  final CreditCard creditCard;
 
+  final VoidCallback finished;
   final FocusNode numberFocus;
   final FocusNode dateFocus;
   final FocusNode nameFocus;
@@ -92,6 +130,7 @@ class CardFront extends StatelessWidget {
                     ],
                     validator: validCreditCardNumber,
                     focusNode: numberFocus,
+                    onSaved: creditCard.setNumber,
                     onSubmited: (_) {
                       /// 1
                       dateFocus.requestFocus();
@@ -104,6 +143,7 @@ class CardFront extends StatelessWidget {
                     inputFormatters: [dateFormatter],
                     validator: validCreditCardDate,
                     focusNode: dateFocus,
+                    onSaved: creditCard.setExpirationDate,
                     onSubmited: (_) {
                       /// 2
                       nameFocus.requestFocus();
@@ -116,6 +156,7 @@ class CardFront extends StatelessWidget {
                     bold: true,
                     validator: validEmpty,
                     focusNode: nameFocus,
+                    onSaved: creditCard.setHoler,
                     onSubmited: (_) {
                       /// 3
                       finished();
@@ -132,8 +173,13 @@ class CardFront extends StatelessWidget {
 }
 
 class CardBack extends StatelessWidget {
-  const CardBack({Key key, this.cvvFocus}) : super(key: key);
+  const CardBack({
+    Key key,
+    this.creditCard,
+    this.cvvFocus,
+  }) : super(key: key);
 
+  final CreditCard creditCard;
   final FocusNode cvvFocus;
 
   @override
@@ -172,6 +218,7 @@ class CardBack extends StatelessWidget {
                       inputType: TextInputType.number,
                       validator: validCVV,
                       focusNode: cvvFocus,
+                      onSaved: creditCard.setCVV,
                     ),
                   ),
                 ),
@@ -203,6 +250,7 @@ class CardTextField extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.focusNode,
     this.onSubmited,
+    this.onSaved,
   }) : textInputAction =
             onSubmited == null ? TextInputAction.done : TextInputAction.next;
 
@@ -217,12 +265,14 @@ class CardTextField extends StatelessWidget {
   final FocusNode focusNode;
   final Function(String) onSubmited;
   final TextInputAction textInputAction;
+  final FormFieldSetter<String> onSaved;
 
   @override
   Widget build(BuildContext context) {
     return FormField<String>(
       initialValue: "",
       validator: validator,
+      onSaved: onSaved,
       builder: (state) {
         return Padding(
           padding: EdgeInsets.symmetric(vertical: 2),

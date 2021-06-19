@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:shoppy/Extension/firebaseRef.dart';
+import 'package:shoppy/another_shop/model/credit_card.dart';
 import 'package:shoppy/another_shop/model/order.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/model/product.dart';
@@ -20,7 +21,8 @@ class CheckoutManager with ChangeNotifier {
     this.cartManager = cartManager;
   }
 
-  Future<void> checkout({Function onStockFail, Function onSuccess}) async {
+  Future<void> checkout(
+      {Function onStockFail, Function onSuccess, CreditCard creditCard}) async {
     loading = true;
 
     try {
