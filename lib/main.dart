@@ -16,6 +16,7 @@ import 'package:shoppy/another_shop/screens/address_screen.dart';
 import 'package:shoppy/another_shop/screens/base_screen.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
 import 'package:shoppy/another_shop/screens/checkout_screen.dart';
+import 'package:shoppy/another_shop/screens/components/credit_card_widget.dart';
 import 'package:shoppy/another_shop/screens/confirmation_screen.dart';
 import 'package:shoppy/another_shop/screens/edit_product_screen.dart';
 import 'package:shoppy/another_shop/screens/product_screen.dart';
@@ -180,62 +181,62 @@ class Shop2 extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: "Shop2",
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 4, 125, 141),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
-          appBarTheme: const AppBarTheme(elevation: 0),
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        routes: {
-          ProductScreen.routeName: (context) => ProductScreen(),
-          CartScreen.routeName: (context) => CartScreen(),
-        },
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case BaseScreen.routeName:
-              return MaterialPageRoute(
-                builder: (_) => BaseScreen(),
-                settings: settings,
-              );
-            case EditProductScreen.routeName:
-              return MaterialPageRoute(
-                builder: (context) => EditProductScreen(
-                  product: settings.name as Product,
-                ),
-              );
-            case SelectProductScreen.routeName:
-              return MaterialPageRoute(
-                builder: (_) => SelectProductScreen(),
-              );
-            case AddressScreen.routeName:
-              return MaterialPageRoute(
-                builder: (_) => AddressScreen(),
-              );
-            case CheckoutScreen.routeName:
-              return MaterialPageRoute(
-                builder: (_) => CheckoutScreen(),
-              );
+          title: "Shop2",
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: const Color.fromARGB(255, 4, 125, 141),
+            scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
+            appBarTheme: const AppBarTheme(elevation: 0),
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          routes: {
+            ProductScreen.routeName: (context) => ProductScreen(),
+            CartScreen.routeName: (context) => CartScreen(),
+          },
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case BaseScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (_) => BaseScreen(),
+                  settings: settings,
+                );
+              case EditProductScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (context) => EditProductScreen(
+                    product: settings.name as Product,
+                  ),
+                );
+              case SelectProductScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (_) => SelectProductScreen(),
+                );
+              case AddressScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (_) => AddressScreen(),
+                );
+              case CheckoutScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (_) => CheckoutScreen(),
+                );
 
-            case ConfirmationScreen.routeName:
-              return MaterialPageRoute(
-                builder: (context) => ConfirmationScreen(
-                  order: settings.arguments as Order,
-                ),
-              );
-            default:
-              return MaterialPageRoute(
-                builder: (_) => BaseScreen(),
-                settings: settings,
-              );
-          }
-        },
-        // home: EditProductScreen(
-        //   product: sampleProducts[0],
-        // ),
-        home: BaseScreen(),
-      ),
+              case ConfirmationScreen.routeName:
+                return MaterialPageRoute(
+                  builder: (context) => ConfirmationScreen(
+                    order: settings.arguments as Order,
+                  ),
+                );
+              default:
+                return MaterialPageRoute(
+                  builder: (_) => BaseScreen(),
+                  settings: settings,
+                );
+            }
+          },
+          // home: EditProductScreen(
+          //   product: sampleProducts[0],
+          // ),
+          // home: BaseScreen(),
+          home: CheckoutScreen()),
     );
   }
 }

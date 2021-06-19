@@ -4,6 +4,34 @@ import 'package:shoppy/another_shop/model/adress.dart';
 
 enum StoreStatus { closed, open, closing }
 
+extension StoreStatusExtention on StoreStatus {
+  String get statusText {
+    switch (this) {
+      case StoreStatus.closed:
+        return "Closed";
+      case StoreStatus.open:
+        return "Open";
+      case StoreStatus.closing:
+        return "Closing";
+      default:
+        return "";
+    }
+  }
+
+  Color get colorForStatus {
+    switch (this) {
+      case StoreStatus.closed:
+        return Colors.red;
+      case StoreStatus.open:
+        return Colors.green;
+      case StoreStatus.closing:
+        return Colors.orange;
+      default:
+        return Colors.black;
+    }
+  }
+}
+
 class Store {
   String name;
   String image;
@@ -12,6 +40,8 @@ class Store {
   Map<String, Map<String, TimeOfDay>> opening;
 
   StoreStatus status;
+
+  String get cleanPhone => phone.replaceAll(RegExp(r"[^\d]"), "");
 
   String get addresText {
     return '${address.street}, ${address.number}${address.complement.isNotEmpty ? ' - ${address.complement}' : ''} - '

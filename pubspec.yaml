@@ -17,12 +17,14 @@ dependencies:
   cached_network_image: ^3.0.0
   carousel_pro: ^1.0.0
   cloud_firestore: ^2.2.0
+  credit_card_type_detector: ^1.1.0
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
   faker: ^2.0.0
   firebase_auth: ^1.1.4
   firebase_core: ^1.1.1
   firebase_storage: ^8.1.0
+  flip_card: ^0.5.0
   flutter_absolute_path: ^1.0.6
   flutter_icons: ^1.1.0
   flutter_image_compress: ^1.0.0
@@ -34,12 +36,15 @@ dependencies:
   image_cropper: ^1.4.0
   image_picker: ^0.7.5+3
   list_tile_switch: ^1.0.0
+  map_launcher: ^2.0.0
+  mask_text_input_formatter: ^2.0.0
   multi_image_picker: ^4.8.0
   provider: ^5.0.0
   screenshot: ^1.2.1
   shared_preferences: ^2.0.5
   sliding_up_panel: ^2.0.0+1
   transparent_image: ^2.0.0
+  url_launcher: ^6.0.6
   uuid: ^3.0.4
   wave: ^0.2.0
 

@@ -4,12 +4,14 @@ import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/another_shop/provider/cart_manager.dart';
 import 'package:shoppy/another_shop/provider/checkout_manager.dart';
 import 'package:shoppy/another_shop/screens/cart_screen.dart';
+import 'package:shoppy/another_shop/screens/components/credit_card_widget.dart';
 import 'package:shoppy/another_shop/screens/confirmation_screen.dart';
 
 class CheckoutScreen extends StatelessWidget {
   CheckoutScreen({Key key}) : super(key: key);
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>(debugLabel: '_ChekoutState');
 
   static const routeName = '/CheckoutScreen';
 
@@ -49,23 +51,34 @@ class CheckoutScreen extends StatelessWidget {
               ),
             );
           }
-          return ListView(
-            children: [
-              PriceCard(
-                buttonTitle: "Chekout button",
-                onTap: () {
-                  model.checkout(onStockFail: (e) {
-                    showErrorAlert(context, e);
-                  }, onSuccess: (order) {
-                    Navigator.of(context).pushNamed(
-                        ConfirmationScreen.routeName,
-                        arguments: order);
-                    // Navigator.of(context).popUntil(
-                    //     (route) => route.settings.name == BaseScreen.routeName);
-                  });
-                },
-              )
-            ],
+          return Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                CreditCardWidget(),
+                PriceCard(
+                  buttonTitle: "Chekout button",
+                  onTap: () {
+                    model.checkout(
+                      onStockFail: (e) {
+                        showErrorAlert(context, e);
+                      },
+                      onSuccess: (order) {
+                        if (_formKey.currentState.validate()) {
+                          print("Success");
+
+                          Navigator.of(context).pushNamed(
+                              ConfirmationScreen.routeName,
+                              arguments: order);
+                          // Navigator.of(context).popUntil(
+                          //     (route) => route.settings.name == BaseScreen.routeName);
+                        }
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
           );
         }),
       ),

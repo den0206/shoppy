@@ -1,4 +1,6 @@
+import 'package:credit_card_type_detector/credit_card_type_detector.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 String valideName(String value) {
   if (value.isEmpty) {
@@ -97,6 +99,35 @@ String validEmpty(String value) {
   }
 }
 
+String validCreditCardNumber(String value) {
+  if (value.length != 19) {
+    return "Invalid";
+  } else if (detectCCType(value) == CreditCardType.unknown) {
+    return "Credit-Card Unknow";
+  } else {
+    return null;
+  }
+}
+
+String validCreditCardDate(String value) {
+  if (value.length != 7) {
+    return "Invalid";
+  } else {
+    return null;
+  }
+}
+
+String validCVV(String value) {
+  if (value.length != 3) {
+    return "Invalid CVV";
+  } else {
+    return null;
+  }
+}
+
 final List<TextInputFormatter> numberFormatter = <TextInputFormatter>[
   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
 ];
+
+final MaskTextInputFormatter dateFormatter = MaskTextInputFormatter(
+    mask: '!#/####', filter: {'#': RegExp('[0-9]'), '!': RegExp('[0-1]')});
