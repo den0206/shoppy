@@ -36,12 +36,13 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<ProductsProvider>(context);
+    final products = context.watch<ProductsProvider>();
+    // final products = Provider.of<ProductsProvider>(context);
     return Scaffold(
       body: ChangeNotifierProvider<SearchPageModel>(
           create: (context) => SearchPageModel(),
           builder: (context, snapshot) {
-            return Consumer<SearchPageModel>(builder: (context, model, child) {
+            return Consumer<SearchPageModel>(builder: (_, model, __) {
               return CustomScrollView(
                 slivers: [
                   SliverPersistentHeader(

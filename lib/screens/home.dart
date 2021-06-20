@@ -27,6 +27,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productsProvider = Provider.of<ProductsProvider>(context);
+
+    /// get products
+    productsProvider.fetchProducts();
     final popularProducts = productsProvider.popularProducts;
 
     return Scaffold(
@@ -46,10 +49,6 @@ class Home extends StatelessWidget {
             ),
           ),
           actions: [
-            // IconButton(
-            //   icon: Icon(Icons.person),
-            //   onPressed: () {},
-            // ),
             IconButton(
               iconSize: 15,
               padding: EdgeInsets.all(10),
@@ -84,7 +83,7 @@ class Home extends StatelessWidget {
                   animationDuration: Duration(milliseconds: 1000),
                   dotSize: 5,
                   dotIncreasedColor: Colors.purple,
-                  dotBgColor: Colors.black..withOpacity(0.2),
+                  dotBgColor: Colors.grey..withOpacity(0.2),
                   dotPosition: DotPosition.bottomCenter,
                   showIndicator: true,
                   indicatorBgPadding: 5.0,

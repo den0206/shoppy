@@ -67,3 +67,12 @@ extension KCategoryExtension on KCategory {
 }
 
 const List<KCategory> categories = KCategory.values;
+
+KCategory getKcategory(String value) {
+  for (final category in categories) {
+    if (category.name == value) {
+      return category;
+    }
+  }
+  return KCategory.all;
+}

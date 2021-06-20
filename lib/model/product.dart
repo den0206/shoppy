@@ -40,6 +40,16 @@ class Product with ChangeNotifier {
         .toList();
   }
 
+  Product.fromDocumant1(DocumentSnapshot document) {
+    id = document.id;
+    title = document[ProductKey.title];
+    description = document[ProductKey.description];
+    imageUrl = document[ProductKey.imageUrl];
+    price = document[ProductKey.price] as double;
+    category = getKcategory(document[ProductKey.category]);
+    brand = getBrand(document[ProductKey.brand]);
+  }
+
   String id;
   String title;
   String description;

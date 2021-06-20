@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoppy/Extension/firebaseRef.dart';
 import 'package:shoppy/consts/sample_products.dart';
 import 'package:shoppy/model/category.dart';
 import 'package:shoppy/model/popular_brand.dart';
@@ -6,10 +7,21 @@ import 'package:shoppy/model/product.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _products = sampleProducts;
-
   List<Product> get products => _products;
+
   List<Product> get popularProducts {
     return _products.where((element) => element.isPopular == true).toList();
+  }
+
+  Future<void> fetchProducts() async {
+    // try {
+    //   final q = await firebaseReference(FirebaseRef.product).get();
+
+    //   _products = q.docs.map((d) => Product.fromDocumant1(d));
+    //   notifyListeners();
+    // } catch (e) {
+    //   print(e.toString());
+    // }
   }
 
   Product findById(String productId) {

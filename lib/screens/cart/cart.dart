@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shoppy/Extension/global_function.dart';
 import 'package:shoppy/consts/colors.dart';
 import 'package:shoppy/consts/my_icons.dart';
+import 'package:shoppy/consts/service/stripe_service.dart';
 import 'package:shoppy/provider/cart_provider.dart';
 import 'package:shoppy/screens/cart/cart_Widgets.dart';
 
@@ -17,7 +19,12 @@ class CartPage extends StatelessWidget {
     final cartItems = cartProvider.cartItems;
 
     return Scaffold(
-      bottomSheet: cartItems.isEmpty ? null : _CheckoutSection(),
+      bottomSheet: cartItems.isEmpty
+          ? null
+          : ChangeNotifierProvider.value(
+              value: CheckoutSectionModel(),
+              child: _CheckoutSection(),
+            ),
       appBar: cartItems.isEmpty
           ? null
           : AppBar(
@@ -52,12 +59,31 @@ class CartPage extends StatelessWidget {
   }
 }
 
+class CheckoutSectionModel with ChangeNotifier {
+  CheckoutSectionModel() {
+    StripeService.init();
+  }
+
+  void payWithCard({
+    int amount,
+    Function() onSuccess,
+  }) async {
+    await Future.delayed(Duration(seconds: 5));
+    print(amount);
+    onSuccess();
+
+    // var response = await StripeService.payWithNewCard("USD", amount.toString());
+    // print(response.message);
+  }
+}
+
 class _CheckoutSection extends StatelessWidget {
   const _CheckoutSection({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final totalAmmount = Provider.of<CartProvider>(context).totalAmount;
+    final model = context.watch<CheckoutSectionModel>();
 
     return Container(
       decoration: BoxDecoration(
@@ -86,7 +112,25 @@ class _CheckoutSection extends StatelessWidget {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(30),
-                    onTap: () {},
+                    onTap: () async {
+                      double amountInCents = totalAmmount * 1000;
+                      int intengerAmount = (amountInCents / 10).ceil();
+
+                      ProgressDialog dialog = ProgressDialog(context);
+                      dialog.style(message: "Pleaser wait...");
+
+                      await dialog.show();
+
+                      model.payWithCard(
+                        amount: intengerAmount,
+                        onSuccess: () async {
+                          await dialog.hide();
+
+                          showAlert(
+                              context, "Success", "Patment Succes", () {});
+                        },
+                      );
+                    },
                     splashColor: Theme.of(context).splashColor,
                     child: Padding(
                       padding: EdgeInsets.all(8),
