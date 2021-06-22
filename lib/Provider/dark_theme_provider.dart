@@ -16,11 +16,17 @@ class ThemeProvider with ChangeNotifier {
           textSelectionTheme: TextSelectionThemeData(
             selectionColor: Colors.white,
           ),
+          backgroundColor: Colors.black,
         )
       : ThemeData.light().copyWith(
           textSelectionTheme: TextSelectionThemeData(
-          selectionColor: Colors.blue,
-        ));
+            selectionColor: Colors.black,
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.grey,
+          ),
+          backgroundColor: Colors.white,
+        );
 
   ThemeProvider() {
     _darkMode = false;

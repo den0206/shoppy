@@ -83,7 +83,7 @@ class FullCart extends StatelessWidget {
           bottomRight: Radius.circular(16),
           topRight: Radius.circular(16),
         ),
-        color: Colors.grey,
+        color: Colors.transparent,
       ),
       child: Row(
         children: [
@@ -95,6 +95,9 @@ class FullCart extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             ),
+          ),
+          SizedBox(
+            width: 10,
           ),
           Flexible(
             child: Padding(
@@ -163,7 +166,9 @@ class FullCart extends StatelessWidget {
                           fontWeight: FontWeight.w600,
                           color: theme.darkMode
                               ? Colors.brown.shade900
-                              : Theme.of(context).accentColor,
+                              : Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
                         ),
                       )
                     ],
@@ -175,7 +180,9 @@ class FullCart extends StatelessWidget {
                         style: TextStyle(
                           color: theme.darkMode
                               ? Colors.brown.shade600
-                              : Theme.of(context).accentColor,
+                              : Theme.of(context)
+                                  .textSelectionTheme
+                                  .selectionColor,
                         ),
                       ),
                       Spacer(),

@@ -27,18 +27,19 @@ class BrandCell extends StatelessWidget {
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
+                  // color: Theme.of(context).backgroundColor,
+                  color: Colors.transparent,
                   image: DecorationImage(
                     image: NetworkImage(product.imageUrl),
                   ),
                   borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(2, 2),
-                      blurRadius: 2,
-                    ),
-                  ],
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey,
+                  //     offset: Offset(2, 2),
+                  //     blurRadius: 2,
+                  //   ),
+                  // ],
                 ),
               ),
             ),
@@ -48,7 +49,8 @@ class BrandCell extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 margin: EdgeInsets.symmetric(vertical: 20),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).backgroundColor,
+                  // color: Theme.of(context).backgroundColor,
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(
                     bottomRight: Radius.circular(10),
                     bottomLeft: Radius.circular(10),

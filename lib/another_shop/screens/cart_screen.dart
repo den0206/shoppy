@@ -168,6 +168,7 @@ class PriceCard extends StatelessWidget {
     final totalPrice = cartManager.totalPrice;
 
     return Card(
+      color: Colors.transparent,
       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Padding(
         padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
@@ -226,15 +227,19 @@ class PriceCard extends StatelessWidget {
             SizedBox(
               height: 8,
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
+            SizedBox(
+              height: 40,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
                   primary: Theme.of(context).primaryColor,
                   textStyle: TextStyle(
                     color: Colors.white,
-                  )),
-              onPressed: onTap,
-              child: Text(
-                buttonTitle,
+                  ),
+                ),
+                onPressed: onTap,
+                child: Text(
+                  buttonTitle,
+                ),
               ),
             )
           ],

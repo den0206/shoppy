@@ -41,9 +41,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(MyApp());
+  // runApp(MyApp());
 
-  // runApp(Shop2());
+  runApp(Shop2());
 }
 
 class MyApp extends StatelessWidget {
@@ -234,6 +234,7 @@ class Shop2 extends StatelessWidget {
         // home: EditProductScreen(
         //   product: sampleProducts[0],
         // ),
+        // home: CheckoutScreen(),
         home: BaseScreen(),
       ),
     );

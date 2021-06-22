@@ -26,7 +26,8 @@ class FeedProducts extends StatelessWidget {
           height: 290,
           decoration: BoxDecoration(
             borderRadius: BorderRadiusDirectional.circular(8),
-            color: Theme.of(context).backgroundColor,
+            // color: Theme.of(context).backgroundColor,
+            color: Colors.transparent,
           ),
           child: Column(
             children: [

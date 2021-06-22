@@ -69,11 +69,9 @@ class CheckoutSectionModel with ChangeNotifier {
     Function() onSuccess,
   }) async {
     await Future.delayed(Duration(seconds: 5));
-    print(amount);
-    onSuccess();
-
     // var response = await StripeService.payWithNewCard("USD", amount.toString());
     // print(response.message);
+    onSuccess();
   }
 }
 
@@ -162,7 +160,7 @@ class _CheckoutSection extends StatelessWidget {
             Text(
               "Sum \$${totalAmmount.toStringAsFixed(2)}",
               style: TextStyle(
-                color: Colors.blue,
+                color: Theme.of(context).textSelectionTheme.selectionColor,
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
               ),
